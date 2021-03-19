@@ -1,0 +1,19 @@
+--- table mit allen heldenfähigkeiten
+Abilities = {}
+Abilities.AbilityBuildCannon = nil
+Abilities.AbilityCamouflage = nil
+Abilities.AbilityCircularAttack = nil
+Abilities.AbilityConvertBuildings = nil
+Abilities.AbilityConvertSettlers = nil
+Abilities.AbilityInflictFear = nil
+Abilities.AbilityMotivateWorkers = nil
+Abilities.AbilityPlaceBomb = nil
+Abilities.AbilityPlaceKeg = nil
+Abilities.AbilityRangedEffect = nil
+Abilities.AbilityScoutBinoculars = nil
+Abilities.AbilityScoutFindResources = nil
+Abilities.AbilityScoutTorches = nil
+Abilities.AbilitySendHawk = nil
+Abilities.AbilityShuriken = nil
+Abilities.AbilitySniper = nil
+Abilities.AbilitySummon = nil
