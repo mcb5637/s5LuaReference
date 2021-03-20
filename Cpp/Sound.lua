@@ -1,0 +1,17 @@
+Sound = {
+    GetVolumeAdjustment = function()end,
+    IsSoundPlaying = function()end,
+    Pause3D = function()end,
+    PauseAll = function()end,
+    Play2DQueuedSound = function()end,
+    Play2DSound = function()end,
+    PlayFeedbackSound = function()end,
+    PlayGUISound = function()end,
+    PlayQueuedFeedbackSound = function()end,
+    PlaySound = function()end,
+    PlaySoundPos = function()end,
+    SetVolumeAdjustment = function()end,
+    StartMusic = function()end,
+    StartOnlineHelpSound = function()end,
+    StopSound = function()end,
+}
