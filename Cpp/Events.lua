@@ -48,3 +48,32 @@ Events.LOGIC_EVENT_TRIBUTE_PAID = nil
 --- Wetter geändert
 -- Event.GetNewWeatherState() Event.GetOldWeatherState()
 Events.LOGIC_EVENT_WEATHER_STATE_CHANGED = nil
+
+--- triggerfix script event. entity getötet (vorher, nach hurt).
+-- Event.GetEntityID1() und Event.GetEntityID2()
+Events.SCRIPT_EVENT_ON_ENTITY_KILLS_ENTITY = nil
+
+--- triggerfix script event.
+Events.SCRIPT_EVENT_ON_SAVEGAME_LOADED = nil
+
+--- triggerfix script event.
+Events.SCRIPT_EVENT_ON_DO_INITIALIZATION = nil
+
+--- triggerfix script event.
+Events.SCRIPT_EVENT_LOW_PRIORITY = nil
+
+--- EntityIdChangedHelper script event.
+-- id changed from Event.GetEntityID1() to Event.GetEntityID2()
+Events.SCRIPT_EVENT_ON_ENTITY_ID_CHANGED = nil
+
+--- FrameworkWrapper script event.
+-- Event.Reason
+Events.SCRIPT_EVENT_ON_LEAVE_MAP = nil
+
+--- FrameworkWrapper script event.
+-- Event.Slot
+Events.SCRIPT_EVENT_ON_PRE_SAVE = nil
+
+--- FrameworkWrapper script event.
+-- Event.Slot
+Events.SCRIPT_EVENT_ON_POST_SAVE = nil
