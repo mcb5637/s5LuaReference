@@ -77,3 +77,9 @@ Events.SCRIPT_EVENT_ON_PRE_SAVE = nil
 --- FrameworkWrapper script event.
 -- Event.Slot
 Events.SCRIPT_EVENT_ON_POST_SAVE = nil
+
+--- TriggerFixCppLogicExtension script event.
+-- id changed from Event.GetEntityID1() (no longer valid) to Event.GetEntityID2()
+-- Event.GetEntityID() is converting helias
+-- Event.GetPlayerID() is the player converted to
+Events.SCRIPT_EVENT_ON_CONVERT_ENTITY = nil

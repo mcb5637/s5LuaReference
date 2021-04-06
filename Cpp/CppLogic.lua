@@ -18,6 +18,10 @@ CppLogic.Logic = {}
 CppLogic.Logic.UICommands = {}
 CppLogic.UA = {}
 
+--- call this function to cleanup used hooks.
+-- does not reset values in entitytypes.
+function CppLogic.OnLeaveMap() end
+
 --- check if an effect is valid
 -- @param id effect id
 -- @return true/false
@@ -89,6 +93,15 @@ function CppLogic.Logic.PlayerSetPaydayStartetTick(p, t) end
 -- @return numBuildingLost
 function CppLogic.Logic.PlayerGetKillStatistics(p) end
 
+--- checks building placement at a specific position.
+-- does not check, if BuildOn type matches.
+-- @param ty entitytype to place
+-- @param pl player
+-- @param pos target position
+-- @param rot rotation
+-- @param bon BuildOn entity id, or 0
+function CppLogic.Logic.CanPlaceBuildingAt(ty, pl, pos, rot, bon) end
+
 --- ui command callback.
 -- func parameters are (eventId, eventData)
 -- @param f func
@@ -132,6 +145,13 @@ function CppLogic.Combat.EnableAoEProjectileFix() end
 --- disables AoE projectile fix.
 -- when enabled, cannons and similar AoE projectiles use the entitytypes damageclass.
 function CppLogic.Combat.DisableAoEProjectileFix() end
+
+--- enables camoflage projectile fix.
+-- when enabled, camoflage does not get reset by ranged attacks, also all attackers get cleared on entering camo.
+function CppLogic.Combat.EnableCamoFix() end
+--- disabes camoflage projectile fix.
+-- when enabled, camoflage does not get reset by ranged attacks, also all attackers get cleared on entering camo.
+function CppLogic.Combat.DisableCamoFix() end
 
 --- iterates over all entities that match a predicate.
 -- perfect to use with for loop.
@@ -308,6 +328,15 @@ function CppLogic.Entity.GetAutoAttackMaxRange(id) end
 -- @return model
 function CppLogic.Entity.GetModel(id) end
 
+--- checks if an entity is feared.
+-- @param id entity
+-- @return false or fearing entity
+function CppLogic.Entity.IsFeared(id) end
+
+--- clears all attackers of an entity.
+-- @param id entity
+function CppLogic.Entity.ClearAttackers(id) end
+
 --- limited lifespan remaining seconds.
 -- @param id entity
 -- @return duration
@@ -395,20 +424,25 @@ function CppLogic.Entity.Settler.ThiefSetStolenResourceInfo(id, ty, am) end
 function CppLogic.Entity.Settler.IsVisible(id) end
 
 --- command to send darios hawk.
+-- decreases hawk range automatically, asserts if ability cannot be used.
 -- @param id entity
 -- @param p target
 function CppLogic.Entity.Settler.CommandSendHawk(id, p) end
 
 --- command to inflict fear.
+-- asserts if ability cannot be used.
 -- @param id entity
 function CppLogic.Entity.Settler.CommandInflictFear(id) end
 
 --- command to place bomb.
+-- asserts if ability cannot be used.
 -- @param id entity
 -- @param p target
 function CppLogic.Entity.Settler.CommandPlaceBomb(id) end
 
 --- command to inflict fear.
+-- asserts if ability cannot be used, checks position.
+-- does not check bottom & top entitytype.
 -- @param id entity
 -- @param p target
 -- @param bottom foundation type
@@ -416,21 +450,92 @@ function CppLogic.Entity.Settler.CommandPlaceBomb(id) end
 function CppLogic.Entity.Settler.CommandPlaceCannon(id, p, bottom, top) end
 
 --- command to activate ranged effect.
+-- asserts if ability cannot be used.
 -- @param id entity
 function CppLogic.Entity.Settler.CommandRangedEffect(id) end
 
 --- command to perform circular attack.
+-- asserts if ability cannot be used.
 -- @param id entity
 function CppLogic.Entity.Settler.CommandCircularAttack(id) end
 
 --- command to summon.
+-- asserts if ability cannot be used.
 -- @param id entity
 function CppLogic.Entity.Settler.CommandSummon(id) end
 
 --- command to convert.
+-- moves into range, asserts if ability cannot be used.
 -- @param id entity
 -- @param tid target
 function CppLogic.Entity.Settler.CommandConvert(id, tid) end
+
+--- command to snipe.
+-- asserts if ability cannot be used, including out of range.
+-- @param id entity
+-- @param tid target
+function CppLogic.Entity.Settler.CommandSnipe(id, tid) end
+
+--- command to use shuriken.
+-- asserts if ability cannot be used, including out of range.
+-- @param id entity
+-- @param tid target
+function CppLogic.Entity.Settler.CommandShuriken(id, tid) end
+
+--- command to use sabotage.
+-- asserts if ability cannot be used. does not check tech requirement.
+-- @param id entity
+-- @param tid target
+function CppLogic.Entity.Settler.CommandSabotage(id, tid) end
+
+--- command to defuse a sabotage.
+-- asserts if ability cannot be used. does not check tech requirement.
+-- @param id entity
+-- @param tid target
+function CppLogic.Entity.Settler.CommandDefuse(id, tid) end
+
+--- command to use binoculars.
+-- asserts if ability cannot be used.
+-- @param id entity
+-- @param p target
+function CppLogic.Entity.Settler.CommandBinocular(id, p) end
+
+--- command to place a torch.
+-- asserts if ability cannot be used. does not check tech requirement.
+-- @param id entity
+-- @param p target
+function CppLogic.Entity.Settler.CommandPlaceTorch(id, p) end
+
+--- command to search resources.
+-- asserts if ability cannot be used. does not check tech requirement.
+-- @param id entity
+function CppLogic.Entity.Settler.CommandPointToRes(id) end
+
+--- command to steal.
+-- asserts if ability cannot be used.
+-- @param id entity
+-- @param tid target
+function CppLogic.Entity.Settler.CommandStealFrom(id, tid) end
+
+--- command to secure stolen goods.
+-- asserts if ability cannot be used.
+-- @param id entity
+-- @param tid target
+function CppLogic.Entity.Settler.CommandSecureGoods(id, tid) end
+
+--- command to move.
+-- asserts if ability cannot be used.
+-- @param id entity
+-- @param pos target
+-- @param r target rotation (optional, nil if not used)
+function CppLogic.Entity.Settler.CommandMove(id, pos, r) end
+
+--- enables conversion hook. gets called twice, before and after conversion.
+-- the first created entity after pre call is the new converted leader.
+-- @param func function(targetId, player, isPost, converterId)
+function CppLogic.Entity.Settler.EnableConversionHook(func) end
+--- disables conversion hook.
+function CppLogic.Entity.Settler.DisableConversionHook() end
 
 --- a leaders experience.
 -- @param id leader
@@ -483,6 +588,12 @@ function CppLogic.Entity.Building.MarketGetCurrentTradeData(id) end
 -- @param sam sell amount (optional)
 -- @param pam progress amount (optional)
 function CppLogic.Entity.Building.MarketSetCurrentTradeData(id, bty, sty, bam, sam, pam) end
+
+--- starts building a cannon.
+-- does not check all parameters, or if foundry is ready.
+-- @param id foundry entity
+-- @param ty cannon type
+function CppLogic.Entity.Building.CommandFoundryBuildCannon(id, ty) end
 
 --- entity type max health.
 -- @param ty entitytype
@@ -883,6 +994,11 @@ function UACore:SetStatus(s) end
 function UACore:SetReMove(b) end
 function UACore:SetCurrentBattleTarget(id) end
 function UACore:GetRangedMelee() end
+function UACore:SetIgnoreFleeing(fl) end
+function UACore:SetAutoRotateFormation(ar) end
+function UACore:GetFirstDeadHero() end
+function UACore:SetPrepDefense(p) end
+function UACore:SetSabotageBridges(s) end
 
 
 --- creates new ua.
@@ -891,8 +1007,10 @@ function UACore:GetRangedMelee() end
 function CppLogic.UA.New(pl, format, commandqueue, spawner, normalize) end
 
 --- gets next enemy in area.
-function CppLogic.UA.GetNearestEnemyInArea(pl, pos, area) end
+function CppLogic.UA.GetNearestEnemyInArea(pl, pos, area, ignoreFleeing) end
 
 function CppLogic.UA.AddIdleTaskList(t) end
 
-function CppLogic.UA.CountTargetEntitiesInArea(pl, pos, area) end
+function CppLogic.UA.AddCannonBuilderData(heroTy, bottomTy, topTy) end
+
+function CppLogic.UA.CountTargetEntitiesInArea(pl, pos, area, ignoreFleeing) end
