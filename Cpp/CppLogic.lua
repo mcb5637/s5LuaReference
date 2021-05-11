@@ -14,8 +14,11 @@ CppLogic.Entity.Leader = {}
 CppLogic.Entity.Building = {}
 CppLogic.EntityType = {}
 CppLogic.EntityType.Settler = {}
+CppLogic.EntityType.Building = {}
+CppLogic.Technology = {}
 CppLogic.Logic = {}
 CppLogic.Logic.UICommands = {}
+CppLogic.UI = {}
 CppLogic.UA = {}
 
 --- call this function to cleanup used hooks.
@@ -102,6 +105,120 @@ function CppLogic.Logic.PlayerGetKillStatistics(p) end
 -- @param bon BuildOn entity id, or 0
 function CppLogic.Logic.CanPlaceBuildingAt(ty, pl, pos, rot, bon) end
 
+--- activates alarm mode.
+-- @param pl player
+function CppLogic.Logic.PlayerActivateAlarm(pl) end
+--- deactivates alarm mode.
+-- @param pl player
+function CppLogic.Logic.PlayerDeactivateAlarm(pl) end
+
+--- upgrades a settler category.
+-- @param pl player
+-- @param ucat
+function CppLogic.Logic.PlayerUpgradeSettlerCategory(pl, ucat) end
+
+--- sets a players tax level.
+-- @param pl player
+-- @param tl
+function CppLogic.Logic.PlayerSetTaxLevel(pl, tl) end
+
+--- activates a players weathermachine/weathertower.
+-- does not check if you are at that weather, or the availability of buildings.
+-- @param pl player
+-- @param wt
+function CppLogic.Logic.PlayerActivateWeatherMachine(pl, wt) end
+
+--- blesses a players settlers.
+-- does not check if you have settlers of that category or a high enough monastery.
+-- @param pl player
+-- @param bc
+function CppLogic.Logic.PlayerBlessSettlers(pl, bc) end
+
+--- gets the sector of a position.
+-- @param p
+-- @return sector
+function CppLogic.Logic.LandscapeGetSector(p) end
+
+--- gets the nearest unblocked position in range and in a specific sector.
+-- @param p
+-- @param sector
+-- @param range
+-- @return position or nil
+function CppLogic.Logic.LandscapeGetNearestUnblockedPosInSector(p, sector, range) end
+
+--- gets the terrain type of a position.
+-- quads resolution (pos/100/4), input full pos.
+-- @param p
+-- @return terrain type
+function CppLogic.Logic.LandscapeGetTerrainType(p) end
+--- gets the water type of a position.
+-- quads resolution (pos/100/4), input full pos.
+-- @param p
+-- @return water type
+function CppLogic.Logic.LandscapeGetWaterType(p) end
+--- gets the water height of a position.
+-- quads resolution (pos/100/4), input full pos.
+-- @param p
+-- @return water height
+function CppLogic.Logic.LandscapeGetWaterHeight(p) end
+--- gets the terrain height of a position.
+-- height resolution (pos/100), input full pos.
+-- @param p
+-- @return terrain height
+function CppLogic.Logic.LandscapeGetTerrainHeight(p) end
+--- gets the terrain vertex color of a position.
+-- height resolution (pos/100), input full pos.
+-- @param p
+-- @return terrain vertex color
+function CppLogic.Logic.LandscapeGetTerrainVertexColor(p) end
+--- gets the blocking of a position.
+-- height resolution (pos/100), input full pos.
+-- @param p
+-- @return blocking info bitfield
+function CppLogic.Logic.LandscapeGetBlocking(p) end
+
+--- enables Events.LOGIC_EVENT_ENTITY_HURT_ENTITY trigger, even if attacker is 0.
+function CppLogic.Logic.EnableAllHurtEntityTrigger() end
+
+--- enables entity max hp to be modified by techs.
+-- does not work with SCELoader.
+-- use a techs HitpointModifier to set up the boni.
+-- then use ModifyHitpoints on settlers and CppLogic.EntityType.Building.AddHPTechMod for buildings to add the techs.
+function CppLogic.Logic.EnableMaxHPTechMod() end
+
+--- gets the damage that is going to be dealt in a Events.LOGIC_EVENT_ENTITY_HURT_ENTITY trigger.
+-- requires activated CppLogic.Logic.EnableAllHurtEntityTrigger.
+-- @return dmg
+function CppLogic.Logic.HurtEntityGetDamage() end
+--- sets the damage that is going to be dealt in a Events.LOGIC_EVENT_ENTITY_HURT_ENTITY trigger.
+-- requires activated CppLogic.Logic.EnableAllHurtEntityTrigger.
+-- @param dmg
+function CppLogic.Logic.HurtEntitySetDamage(dmg) end
+
+--- gets all loaded archives and folders.
+-- @return table of strings
+function CppLogic.Logic.GetLoadOrder() end
+--- adds a archive on top of your load order.
+-- @param map archive, relative to current dir, so "extra2\\shr\\maps\\user\\map.s5x for a map file
+function CppLogic.Logic.AddArchive(arch) end
+--- removes the top archive. may only remove .s5x map archives.
+function CppLogic.Logic.RemoveTopArchive() end
+
+--- color by color index.
+-- @param index
+-- @return r
+-- @return g
+-- @return b
+-- @return a
+function CppLogic.Logic.GetColorByColorIndex(index) end
+--- color by color index. Refreshes the color of players.
+-- @param index
+-- @param r
+-- @param g
+-- @param b
+-- @param a (optional, default 255)
+function CppLogic.Logic.SetColorByColorIndex(index, r, g, b, a) end
+
 --- ui command callback.
 -- func parameters are (eventId, eventData)
 -- @param f func
@@ -109,7 +226,8 @@ function CppLogic.Logic.UICommands.SetCallback(f) end
 --- ui command callback.
 function CppLogic.Logic.UICommands.UnSetCallback() end
 
---- compiles a lua chunk
+--- compiles a lua chunk.
+-- asserts if kimichuras dlls are detected.
 -- @param code to compile, sourcecode or binary
 -- @return function to execute the compiled code, or error message
 -- @return bool successful
@@ -118,6 +236,24 @@ function CppLogic.API.Eval(code) end
 --- logs a string to the current settlers log.
 -- @param str the string to log
 function CppLogic.API.Log(str) end
+
+--- reads a file into a string.
+-- can only read files in data\maps\externalmap\
+-- @param file path to the file
+-- @return file content
+function CppLogic.API.ReadFileAsString(file) end
+
+--- checks if a file exists.
+-- @param file path to the file
+-- @return bool
+function CppLogic.API.DoesFileExist(file) end
+
+--- compiles a lua chunk and executes it. shows the script in the debugger as file with the defined name.
+-- asserts if kimichuras dlls are detected.
+-- @param code to compile, sourcecode or binary
+-- @param name name to show in debugger
+-- @return return values of the executed code
+function CppLogic.API.DoString(code, name) end
 
 --- deals damage to a target.
 -- calls respective hurt entity trigger.
@@ -346,6 +482,11 @@ function CppLogic.Entity.GetLimitedLifespanRemaining(id) end
 -- @param t duration
 function CppLogic.Entity.GetLimitedLifespanRemaining(id, t) end
 
+--- replaces a tree with its ResourceTree equivalent.
+-- @param id entity
+-- @return new id or nil
+function CppLogic.Entity.ReplaceWithResourceEntity(id) end
+
 --- gets the leader of a soldier.
 -- @param id id of the solder
 -- @return id of the leader
@@ -423,6 +564,12 @@ function CppLogic.Entity.Settler.ThiefSetStolenResourceInfo(id, ty, am) end
 -- @param id entity
 function CppLogic.Entity.Settler.IsVisible(id) end
 
+--- checks if a settler is idle
+-- this is in defend or hold position command, or having the type specific idle tasklist.
+-- workers are never idle.
+-- @param id entity
+function CppLogic.Entity.Settler.IsIdle(id) end
+
 --- command to send darios hawk.
 -- decreases hawk range automatically, asserts if ability cannot be used.
 -- @param id entity
@@ -462,6 +609,7 @@ function CppLogic.Entity.Settler.CommandCircularAttack(id) end
 --- command to summon.
 -- asserts if ability cannot be used.
 -- @param id entity
+-- @return ids of summoned entities
 function CppLogic.Entity.Settler.CommandSummon(id) end
 
 --- command to convert.
@@ -530,12 +678,49 @@ function CppLogic.Entity.Settler.CommandSecureGoods(id, tid) end
 -- @param r target rotation (optional, nil if not used)
 function CppLogic.Entity.Settler.CommandMove(id, pos, r) end
 
+--- command to construct a building.
+-- asserts if ability cannot be used.
+-- @param id entity
+-- @param tid target
+-- @return bool if a slot was free
+function CppLogic.Entity.Settler.CommandSerfConstructBuilding(id, tid) end
+
+--- command to construct a building.
+-- asserts if ability cannot be used.
+-- @param id entity
+-- @param tid target
+-- @return bool if a slot was free
+function CppLogic.Entity.Settler.CommandSerfRepairBuilding(id, tid) end
+
+--- command to extract a resource.
+-- automatically tries to convert trees to ResourceTrees, asserts if no resource doodad afterwards.
+-- @param id entity
+-- @param tid target
+-- @return resource entity id (might be different than tid)
+function CppLogic.Entity.Settler.CommandSerfExtract(id, tid) end
+
 --- enables conversion hook. gets called twice, before and after conversion.
 -- the first created entity after pre call is the new converted leader.
 -- @param func function(targetId, player, isPost, converterId)
 function CppLogic.Entity.Settler.EnableConversionHook(func) end
 --- disables conversion hook.
 function CppLogic.Entity.Settler.DisableConversionHook() end
+
+--- command to expell a settler.
+-- @param id entity
+function CppLogic.Entity.Settler.CommandExpell(id) end
+
+--- command to turn a serf to a battleserf.
+-- @param id entity
+function CppLogic.Entity.Settler.CommandTurnSerfToBattleSerf(id) end
+--- command to turn a battleserf back to a serf.
+-- @param id entity
+function CppLogic.Entity.Settler.CommandTurnBattleSerfToSerf(id) end
+
+--- teleports a settler to a position. does not change id.
+-- @param id entity
+-- @param p target pos
+function CppLogic.Entity.Settler.SetPosition(id, p) end
 
 --- a leaders experience.
 -- @param id leader
@@ -545,6 +730,11 @@ function CppLogic.Entity.Leader.GetExperience(id) end
 -- @param id leader
 -- @param xp xp
 function CppLogic.Entity.Leader.SetExperience(id, xp) end
+
+--- attaches a soldier to a leader.
+-- @param leader
+-- @param soldier
+function CppLogic.Entity.Leader.AttachSoldier(leader, soldier) end
 
 --- a leaders troop health (hp of all soldiers summed up).
 -- -1 when not yet set (calculate in lua as all soldiers at full hp).
@@ -570,6 +760,23 @@ function CppLogic.Entity.Building.SetHeight(id, h) end
 -- @return bool active
 function CppLogic.Entity.Building.GetBarracksAutoFillActive(id) end
 
+--- construction site id.
+-- @param id entity
+-- @return id
+function CppLogic.Entity.Building.GetConstructionSite(id) end
+
+--- nearest construction slot.
+-- @param build building
+-- @param p position to measure from
+-- @return slot index, -1 if nothing free
+function CppLogic.Entity.Building.GetNearestFreeConstructionSlotFor(build, p) end
+
+--- nearest repair slot.
+-- @param build building
+-- @param p position to measure from
+-- @return slot index, -1 if nothing free
+function CppLogic.Entity.Building.GetNearestFreeRepairSlotFor(build, p) end
+
 --- market trade data.
 -- progress is buy amount + sell amount
 -- @param id entity
@@ -594,6 +801,87 @@ function CppLogic.Entity.Building.MarketSetCurrentTradeData(id, bty, sty, bam, s
 -- @param id foundry entity
 -- @param ty cannon type
 function CppLogic.Entity.Building.CommandFoundryBuildCannon(id, ty) end
+
+--- starts upgrading a building. does not cost resources.
+-- @param id foundry entity
+function CppLogic.Entity.Building.StartUpgrade(id) end
+--- cancels an upgrade currently in progress. does not refund resources.
+-- @param id foundry entity
+function CppLogic.Entity.Building.CancelUpgrade(id) end
+
+--- checks if a building is idle.
+-- this is not under constrcution, upgrading, researching, in alarm, recruiting or trading.
+-- @param id entity
+-- @return bool idle status
+function CppLogic.Entity.Building.IsIdle(id) end
+
+--- gets leaders currently getting trainet at a barracks.
+-- @param id entity
+-- @return entities
+function CppLogic.Entity.Building.BarracksGetLeadersTrainingAt(id) end
+
+--- gets the entitytype of the cannon in construction.
+-- 0 if no entitytype, gets reset when cannon spawns.
+-- @param id entity
+-- @return entitytype
+function CppLogic.Entity.Building.FoundryGetCannonTypeInConstruction(id) end
+
+--- buys a soldier for a leader at a specific barracks.
+-- uses resources.
+-- @param bid barracks
+-- @param lid leader
+-- @param noChecktype (optional, default false) set to true to skip the check for matching barracks type.
+-- @return entitytype
+function CppLogic.Entity.Building.BarracksBuySoldierForLeader(bid, lid, noChecktype) end
+
+--- activates overtime.
+-- checks for cooldown.
+-- @param id entity
+function CppLogic.Entity.Building.ActivateOvertime(id) end
+--- deactivates overtime and sets overtime cooldown.
+-- @param id entity
+function CppLogic.Entity.Building.DeactivateOvertime(id) end
+
+--- sets a barrack to recruit full groups.
+-- @param id entity
+function CppLogic.Entity.Building.BarracksRecruitGroups(id) end
+--- sets a barrack to recruit only leaders.
+-- @param id entity
+function CppLogic.Entity.Building.BarracksRecruitLeaders(id) end
+
+--- buys a serf at a hq.
+-- uses resources.
+-- @param id entity
+function CppLogic.Entity.Building.HQBuySerf(id) end
+
+--- sells a building.
+-- does not give you back resources.
+-- @param id entity
+function CppLogic.Entity.Building.SellBuilding(id) end
+
+--- starts researching a tech.
+-- does not check, if the tech belongs to that building.
+-- uses resources.
+-- @param id entity
+-- @param tech
+function CppLogic.Entity.Building.StartResearch(id, tech) end
+--- cancels research.
+-- gives back resources.
+-- @param id entity
+function CppLogic.Entity.Building.CancelResearch(id) end
+
+--- starts a market transaction.
+-- uses resources.
+-- @param id entity
+-- @param sellty
+-- @param buyty
+-- @param buyam
+function CppLogic.Entity.Building.MarketStartTrade(id, sellty, buyty, buyam) end
+--- cancels a market transaction.
+-- gives back resources.
+-- @param id entity
+function CppLogic.Entity.Building.MarketCancelTrade(id) end
+
 
 --- entity type max health.
 -- @param ty entitytype
@@ -927,6 +1215,13 @@ function CppLogic.EntityType.Building.GetUpradeCost(ty) end
 -- @param ignoreZeroes should zeroes get ignored (optional)
 function CppLogic.EntityType.Building.SetUpradeCost(ty, c, ignoreZeroes) end
 
+--- adds a tech modifier for building hp.
+-- does not work with SCELoader.
+-- has no effect without EnableMaxHPTechMod.
+-- @param ty entitytype
+-- @param tech
+function CppLogic.EntityType.Building.AddHPTechMod(ty, tech) end
+
 --- tech research time and costs.
 -- @param tid tech id
 -- @return research time needed
@@ -974,6 +1269,213 @@ function CppLogic.Technology.GetRangeModifier(tid) end
 -- @return value
 function CppLogic.Technology.GetSpeedModifier(tid) end
 
+--- adds a construction time modifier to a technology.
+-- default modifier is 1.0, smaller modifiers lead to faster construction.
+-- @param tech tech
+-- @param value modification value
+-- @param op string operation to perform, accepted is "+" "-" "*" "/"
+function CppLogic.Technology.TechAddConstructionSpeedModifier(tech, value, op) end
+
+--- gets a widgets position and size.
+-- @param wid widget
+-- @return x
+-- @return y
+-- @return w
+-- @return h
+function CppLogic.UI.WidgetGetPositionAndSize(wid) end
+--- sets a widgets position and size as floats (so you can set fractional coordinates).
+-- @param wid widget
+-- @param x (optional, default current)
+-- @param y (optional, default current)
+-- @param w (optional, default current)
+-- @param h (optional, default current)
+function CppLogic.UI.WidgetSetPositionAndSize(wid, x, y, w, h) end
+
+--- gets a widgets updatemanual flag.
+-- @param wid widget
+-- @return bool
+function CppLogic.UI.WidgetGetUpdateManualFlag(wid) end
+--- sets a widgets updatemanual flag.
+-- @param wid widget
+-- @param bool
+function CppLogic.UI.WidgetSetUpdateManualFlag(wid, f) end
+
+--- gets a widgets update func.
+-- @param wid widget
+-- @return command string
+-- @return func or err msg
+function CppLogic.UI.WidgetGetUpdateFunc(wid) end
+--- calls a buttons update func.
+-- @param wid widget
+function CppLogic.UI.WidgetCallUpdateFunc(wid) end
+--- overrides a buttons update func to a lua func that gets called without any arguments.
+-- @param wid widget
+-- @param f func
+function CppLogic.UI.WidgetOverrideUpdateFunc(wid, f) end
+
+--- gets a buttons action func.
+-- @param wid widget
+-- @return command string
+-- @return func or err msg
+function CppLogic.UI.ButtonGetActionFunc(wid) end
+--- calls a buttons action func.
+-- @param wid widget
+function CppLogic.UI.ButtonCallActionFunc(wid) end
+--- overrides a buttons action func to a lua func that gets called without any arguments.
+-- @param wid widget
+-- @param f func
+function CppLogic.UI.ButtonOverrideActionFunc(wid, f) end
+
+--- gets a widgets tooltip func.
+-- @param wid widget
+-- @return command string
+-- @return func or err msg
+function CppLogic.UI.WidgetGetTooltipFunc(wid) end
+--- calls a widgets tooltip action func.
+-- @param wid widget
+function CppLogic.UI.WidgetCallTooltipFunc(wid) end
+--- overrides a widgets tooltip action func to a lua func that gets called without any arguments.
+-- @param wid widget
+-- @param f func
+function CppLogic.UI.WidgetOverrideTooltipFunc(wid, f) end
+
+--- gets a widgets tooltip data.
+-- target widget can be the text widget or the container.
+-- @param wid widget
+-- @return target widget id
+-- @return control target widget state flag
+-- @return tooltip enabled flag
+function CppLogic.UI.WidgetGetTooltipData(wid) end
+--- sets a widgets tooltip data.
+-- target widget can be the text widget or the container.
+-- @param wid widget
+-- @param tid target widget id
+-- @param controlFlag control target widget state flag
+-- @param enabledFlag tooltip enabled flag
+function CppLogic.UI.WidgetSetTooltipData(wid, tid, controlFlag, enabledFlag) end
+
+--- gets a widgets tooltip string.
+-- this string gets shown automatically, if the target widget is a text widget.
+-- @param wid widget
+-- @return raw string
+-- @return string table text key
+function CppLogic.UI.WidgetGetTooltipString(wid) end
+--- sets a widgets tooltip string.
+-- this string gets shown automatically, if the target widget is a text widget.
+-- @param wid widget
+-- @param string
+-- @param isSTTKey (optional, default false) if true, sets this as string table text key
+function CppLogic.UI.WidgetSetTooltipString(wid, str, isSTTKey) end
+
+--- returns a table with all child widget ids.
+-- @param wid widget
+-- @param t
+function CppLogic.UI.ContainerWidgetGetAllChildren(wid) end
+
+--- returns if the tooltip of this widget is shown.
+-- @param wid widget
+-- @param bool
+function CppLogic.UI.WidgetIsTooltipShown(wid) end
+
+--- returns the font config.
+-- @param fontName font
+-- @return size
+-- @return offset
+-- @return spacing
+function CppLogic.UI.FontGetConfig(fontName) end
+--- sets the font config.
+-- @param fontName font
+-- @param size
+-- @param offset
+-- @param spacing
+function CppLogic.UI.FontSetConfig(fontName, size, offset, spacing) end
+
+--- sets the font of a widget.
+-- @param wid widget
+-- @param fontName font
+function CppLogic.UI.WidgetSetFont(wid, fontName) end
+
+--- creates a new static widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreateStaticWidgetChild(wid, name, before) end
+--- creates a new static text widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreateStaticTextWidgetChild(wid, name, before) end
+--- creates a new pure tooltip widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreatePureTooltipWidgetChild(wid, name, before) end
+--- creates a new gfx button widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreateGFXButtonWidgetChild(wid, name, before) end
+--- creates a new text button widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreateTextButtonWidgetChild(wid, name, before) end
+--- creates a new progress bar widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreateProgressBarWidgetChild(wid, name, before) end
+--- creates a new container widget and registers it as its child.
+-- the widget is initially hidden and all variables at a default value.
+-- all attached functions are empty, and the UpdateManualFlag is set.
+-- position and size are 0.
+-- @param wid widget
+-- @param name widgetname of the child
+-- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
+-- @return id
+function CppLogic.UI.ContainerWidgetCreateContainerWidgetChild(wid, name, before) end
+
+--- gets a widget material textures position and size
+-- @param wid widget
+-- @param mat material index, [0..5] for buttons, 0 for statics.
+-- @return x
+-- @return y
+-- @return w
+-- @return h
+function CppLogic.UI.WidgetMaterialGetTextureCoordinates(wid, mat) end
+--- sets a widget material textures position and size
+-- @param wid widget
+-- @param mat material index, [0..5] for buttons, 0 for statics.
+-- @param x (optional, default current)
+-- @param y (optional, default current)
+-- @param w (optional, default current)
+-- @param h (optional, default current)
+function CppLogic.UI.WidgetMaterialSetTextureCoordinates(wid, mat, x, y, w, h) end
+
 --- @class UACore
 local UACore = {}
 function UACore:AddLeader(id) end
@@ -1008,8 +1510,6 @@ function CppLogic.UA.New(pl, format, commandqueue, spawner, normalize) end
 
 --- gets next enemy in area.
 function CppLogic.UA.GetNearestEnemyInArea(pl, pos, area, ignoreFleeing) end
-
-function CppLogic.UA.AddIdleTaskList(t) end
 
 function CppLogic.UA.AddCannonBuilderData(heroTy, bottomTy, topTy) end
 
