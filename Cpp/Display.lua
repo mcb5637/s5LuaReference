@@ -14,8 +14,9 @@ function Display.DbgSetCalcVisibilityBits() end
 --- funktionslos
 function Display.DbgSetDepthBias32() end
 
---- funktionslos
-function Display.DbgSetModelTerrainColorPortions() end
+--- setzt model parameter, um licht und vertexcolor für die anzeige zu nutzen.
+-- für bewegliche entities wenig brauchbar, da die farbe beim weg und hinbewegen der kamera aktualisiert wird.
+function Display.DbgSetModelTerrainColorPortions(modelname, lightcolor, vertexcolor) end
 
 --- funktionslos
 function Display.DbgShadowMapGetLightBBox() end

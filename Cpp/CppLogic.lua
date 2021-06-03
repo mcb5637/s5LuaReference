@@ -219,6 +219,35 @@ function CppLogic.Logic.GetColorByColorIndex(index) end
 -- @param a (optional, default 255)
 function CppLogic.Logic.SetColorByColorIndex(index, r, g, b, a) end
 
+--- sets a function to be called after payday was done.
+-- @param func to be called (playerId, taxes)->GoldToAdd
+function CppLogic.Logic.SetPaydayCallback(func) end
+
+--- sets a function to be called for building placement checks.
+-- only gets called if all usual conditions for placement are satisfied.
+-- set to nil to remove.
+-- (with SCELoader player is always -1, and buildOnID is a bool instead of an id).
+-- @param func to be called (entitytype, playerId, pos, rotation, buildOnID)->canBuild
+function CppLogic.Logic.SetPlaceBuildingAdditionalCheck(func) end
+
+--- sets if leader regenration regenerates troop hp.
+-- does not work with SCELoader.
+-- @param b bool
+function CppLogic.Logic.SetLeadersRegenerateTroopHealth(b) end
+
+--- sets a stringtabletexts accosiated text. automatically resets on leaving the game.
+-- (stored in lua registry).
+-- @param key key to replace
+-- @param text replacement string or nil to restore default
+function CppLogic.Logic.SetStringTableText(key, text) end
+
+--- serf ui place building rotaton.
+-- @return rotation
+function CppLogic.Logic.GetPlaceBuildingRotation() end
+--- serf ui place building rotaton.
+-- @param r rotation
+function CppLogic.Logic.SetPlaceBuildingRotation(r) end
+
 --- ui command callback.
 -- func parameters are (eventId, eventData)
 -- @param f func
@@ -254,6 +283,22 @@ function CppLogic.API.DoesFileExist(file) end
 -- @param name name to show in debugger
 -- @return return values of the executed code
 function CppLogic.API.DoString(code, name) end
+
+--- gets the path to a map. internal data or s5x file.
+-- @param mapname filename of the map
+-- @param typ type code
+-- @param campname campagn name
+-- @return path
+function CppLogic.API.MapGetDataPath(mapname, typ, campname) end
+
+--- returns the map a save is accociated with.
+-- does not check, if the save is still valid, just if it exists.
+-- @param save
+-- @return mapname
+-- @return typ
+-- @return campname
+-- @return GUID
+function CppLogic.API.SaveGetMapInfo(save) end
 
 --- deals damage to a target.
 -- calls respective hurt entity trigger.
@@ -293,7 +338,7 @@ function CppLogic.Combat.DisableCamoFix() end
 -- perfect to use with for loop.
 -- examples:
 -- - for id in CppLogic.Entity.EntityIterator(...) do Message(id) end  
--- - for id, rsqu in CppLogic.Entity.EntityIterator(CppLogic.Entity.Predicates.InCircle(...), ...) do Message(id.."   "..r) end  
+-- - for id, rsqu, prio in CppLogic.Entity.EntityIterator(CppLogic.Entity.Predicates.InCircle(...), ...) do Message(id.."   "..r) end  
 -- @param pred predicate userdata
 -- @return nextEntity func
 -- @return iteratorStatus
@@ -330,6 +375,17 @@ function CppLogic.Entity.Predicates.And(...) end
 -- @param ... predicates
 -- @return predicate userdata
 function CppLogic.Entity.Predicates.Or(...) end
+
+--- creates a predicate that performs an not of anoher predicate.
+-- @param p predicate
+-- @return predicate userdata
+function CppLogic.Entity.Predicates.Not(p) end
+
+--- creates a predicate that always matches, but sets the priority to prio if p matches it.
+-- @param p predicate
+-- @param prio priority
+-- @return predicate userdata
+function CppLogic.Entity.Predicates.SetPriority(p, prio) end
 
 --- creates a predicate that checks for one entitytype.
 -- @param etyp entitytype to check against
@@ -486,6 +542,50 @@ function CppLogic.Entity.GetLimitedLifespanRemaining(id, t) end
 -- @param id entity
 -- @return new id or nil
 function CppLogic.Entity.ReplaceWithResourceEntity(id) end
+
+--- overrides an entities max hp.
+-- @param id entity
+-- @param hp (optional, <0 to disable)
+-- @param useBoni (optional)
+function CppLogic.Entity.SetMaxHP(id, hp, useBoni) end
+
+--- overrides an entities damage.
+-- does not work for trapcannon.
+-- @param id entity
+-- @param dmg, (<0 disable)
+function CppLogic.Entity.SetDamage(id, dmg) end
+
+--- overrides an entities armor.
+-- @param id entity
+-- @param armor, (<0 disable)
+function CppLogic.Entity.SetArmor(id, armor) end
+
+--- overrides a settlers/buildings exploration.
+-- use Logic for scriptentities.
+-- @param id entity
+-- @param ex, (<0 disable)
+function CppLogic.Entity.SetExploration(id, ex) end
+
+--- overrides a settlers/autocannons max attack range.
+-- @param id entity
+-- @param ran, (<0 disable)
+function CppLogic.Entity.SetAutoAttackMaxRange(id, ran) end
+
+--- overrides a n entities display name.
+-- @param id entity
+-- @param n, ("" disable)
+function CppLogic.Entity.SetDisplayName(id, n) end
+
+--- clones all overrides.
+-- @param from entity (can be id of last destroyed entity)
+-- @param to entity 
+function CppLogic.Entity.CloneOverrideData(from, to) end
+
+--- heals an entity. for leaders its own hp is healed, then troop hp if enabled.
+-- @param id entity
+-- @param heal
+-- @param healTroopHp (optional, default false)
+function CppLogic.Entity.PerformHeal(id, heal, healTroopHp) end
 
 --- gets the leader of a soldier.
 -- @param id id of the solder
@@ -722,6 +822,11 @@ function CppLogic.Entity.Settler.CommandTurnBattleSerfToSerf(id) end
 -- @param p target pos
 function CppLogic.Entity.Settler.SetPosition(id, p) end
 
+--- enables ranged effect advanced healing. heal gets transfered from solder to leader, first healing the leader, and if something is left, the troop hp pool.
+-- does not work with SCELoader.
+-- @param enabl bool
+function CppLogic.Entity.Settler.EnableRangedEffectSoldierHeal(enabl) end
+
 --- a leaders experience.
 -- @param id leader
 -- @return xp
@@ -745,6 +850,23 @@ function CppLogic.Entity.Leader.GetTroopHealth(id) end
 -- @param id leader
 -- @param hp hp
 function CppLogic.Entity.Leader.SetTroopHealth(id, hp) end
+
+--- a leaders troop limit.
+-- @param id leader
+-- @param limit limit
+function CppLogic.Entity.Leader.SetSoldierLimit(id, limit) end
+
+--- a leaders regeneration.
+-- does not work with SCELoader.
+-- @param id leader
+-- @return hp regenerated
+-- @return seconds between refreshes
+function CppLogic.Entity.Leader.GetRegeneration(id) end
+--- a leaders regeneration.
+-- @param id leader
+-- @param hp regenerated
+-- @param seconds between refreshes
+function CppLogic.Entity.Leader.SetRegeneration(id, hp, seconds) end
 
 --- building height (& construction progress).
 -- @param id entity
@@ -882,6 +1004,17 @@ function CppLogic.Entity.Building.MarketStartTrade(id, sellty, buyty, buyam) end
 -- @param id entity
 function CppLogic.Entity.Building.MarketCancelTrade(id) end
 
+--- removes the last offer in a mercenary or techtrader tent.
+-- @param id entity
+function CppLogic.Entity.Building.MercenaryRemoveLastOffer(id) end
+--- sets the remaining units and cost in a mercenary or techtrader tent.
+-- @param id entity
+-- @param ind index
+-- @param remain offers remaining (optional, default no change)
+-- @param cost cost table (optional, default no change)
+-- @param ignoreZeroes ignore anything that is zero (optional, default false)
+function CppLogic.Entity.Building.MercenarySetOfferData(id, ind, remain, cost, ignoreZeroes) end
+
 
 --- entity type max health.
 -- @param ty entitytype
@@ -955,13 +1088,13 @@ function CppLogic.EntityType.SetAutoAttackMissChance(ty, mc) end
 -- @param ty entitytype
 -- @return max range
 -- @return min range (nil for autocannons)
-function CppLogic.EntityType.GetAutoAttackMissChance(ty) end
+function CppLogic.EntityType.GetAutoAttackRange(ty) end
 --- range chance of autoattacks of an entity type.
 -- for autocannons only max range, for anything else max and min range.
 -- @param ty entitytype
 -- @return max range (optional)
 -- @return min range (ignored for autocannons) (optional)
-function CppLogic.EntityType.SetAutoAttackMissChance(ty, maxrange, minrange) end
+function CppLogic.EntityType.SetAutoAttackRange(ty, maxrange, minrange) end
 
 --- settler or building type armor and armorclass.
 -- @param ty entitytype
@@ -1475,6 +1608,33 @@ function CppLogic.UI.WidgetMaterialGetTextureCoordinates(wid, mat) end
 -- @param w (optional, default current)
 -- @param h (optional, default current)
 function CppLogic.UI.WidgetMaterialSetTextureCoordinates(wid, mat, x, y, w, h) end
+
+--- char entered callback. use string.char to get the character.
+-- does not work with SCELoader.
+-- gets called when a key (or key kombination) is pressed that can be converted to a char.
+-- set to nil to remove.
+-- @param f func to be called (char)->nil
+function CppLogic.UI.SetCharTrigger(f) end
+--- key pressed callback.
+-- does not work with SCELoader.
+-- use global Keys to check what was pessed.
+-- gets called at least twice, when the key gets pressed down, then when the key gets released (only time up is true).
+-- if the key keepd pressed, after a short delay the trigger is called in fast succession.
+-- set to nil to remove.
+-- @param f func to be called (key, up)->nil
+function CppLogic.UI.SetKeyTrigger(f) end
+--- mouse event callback.
+-- does not work with SCELoader.
+-- use global MouseEvents to check what was pessed (from CommunityLib).
+-- MouseMove does not get forwarded to lua (cause it is spammed),
+-- Double clicks are not generated, you get 2 normal klicks instead.
+-- parameters for MouseWheel are (id, x, y, forward).
+-- parameters for XButtons are (id, x, y, isxb2).
+-- parameters for all others are (id, x, y).
+-- x and y cooridates are screen coordinates not processed by SHoK and are equals to what GUI.GetMousePosition returns you (not scaled to widget coordinates).
+-- set to nil to remove.
+-- @param f func to be called
+function CppLogic.UI.SetMouseTrigger(f) end
 
 --- @class UACore
 local UACore = {}
