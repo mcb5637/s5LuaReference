@@ -248,8 +248,19 @@ function CppLogic.Logic.GetPlaceBuildingRotation() end
 -- @param r rotation
 function CppLogic.Logic.SetPlaceBuildingRotation(r) end
 
+--- fixes snipe task, now it actually shoots a projectile which does damage.
+-- @param override func (optional, default nil) (sniper, target, dmg)->dmgOverride called before the projectile gets fired, can change the damage)
+function CppLogic.Logic.FixSnipeDamage(override) end
+
+--- gets the current weather GFX state (4th param of Logic.AddWeatherElement).
+-- @return weatherGFX
+function CppLogic.Logic.GetCurrentWeatherGFXState() end
+
 --- ui command callback.
--- func parameters are (eventId, eventData)
+-- func parameters are (eventId, eventData, writeback).
+-- function can return true to skip further event execution.
+-- call writeback(eventData) with a modified eventData to change event values.
+-- writeback has the event as a upvalue, do not save it and call it later, you will override a random c stack position!
 -- @param f func
 function CppLogic.Logic.UICommands.SetCallback(f) end
 --- ui command callback.
@@ -299,6 +310,11 @@ function CppLogic.API.MapGetDataPath(mapname, typ, campname) end
 -- @return campname
 -- @return GUID
 function CppLogic.API.SaveGetMapInfo(save) end
+
+--- returns the complete GDB as multilayered table.
+-- keys are split at every \, and put into a layered map.
+-- @return table
+function CppLogic.API.GetGDB() end
 
 --- deals damage to a target.
 -- calls respective hurt entity trigger.
@@ -685,7 +701,7 @@ function CppLogic.Entity.Settler.CommandInflictFear(id) end
 -- asserts if ability cannot be used.
 -- @param id entity
 -- @param p target
-function CppLogic.Entity.Settler.CommandPlaceBomb(id) end
+function CppLogic.Entity.Settler.CommandPlaceBomb(id, p) end
 
 --- command to inflict fear.
 -- asserts if ability cannot be used, checks position.
@@ -712,6 +728,11 @@ function CppLogic.Entity.Settler.CommandCircularAttack(id) end
 -- @return ids of summoned entities
 function CppLogic.Entity.Settler.CommandSummon(id) end
 
+--- command to activate camoflage.
+-- asserts if ability cannot be used.
+-- @param id entity
+function CppLogic.Entity.Settler.CommandActivateCamoflage(id) end
+
 --- command to convert.
 -- moves into range, asserts if ability cannot be used.
 -- @param id entity
@@ -729,6 +750,11 @@ function CppLogic.Entity.Settler.CommandSnipe(id, tid) end
 -- @param id entity
 -- @param tid target
 function CppLogic.Entity.Settler.CommandShuriken(id, tid) end
+
+--- command to motivate workers.
+-- asserts if ability cannot be used, including out of range.
+-- @param id entity
+function CppLogic.Entity.Settler.CommandMotivateWorkers(id) end
 
 --- command to use sabotage.
 -- asserts if ability cannot be used. does not check tech requirement.
@@ -1015,6 +1041,24 @@ function CppLogic.Entity.Building.MercenaryRemoveLastOffer(id) end
 -- @param ignoreZeroes ignore anything that is zero (optional, default false)
 function CppLogic.Entity.Building.MercenarySetOfferData(id, ind, remain, cost, ignoreZeroes) end
 
+--- gets the BuildOn entity this building is constructed on (mine/VC/bridge).
+-- @param id entity
+-- @return id or 0
+function CppLogic.Entity.Building.GetBuildOnEntity(id) end
+--- gets the building constructed on a BuildOn entity (mine/VC/bridge).
+-- @param id entity
+-- @return id or 0
+function CppLogic.Entity.Building.BuildOnEntityGetBuilding(id) end
+
+--- gets the constructonsite of a building.
+-- @param id entity
+-- @return id or 0
+function CppLogic.Entity.Building.GetConstructionSite(id) end
+--- gets building of a constructionsite.
+-- @param id entity
+-- @return id or 0
+function CppLogic.Entity.Building.ConstructionSiteGetBuilding(id) end
+
 
 --- entity type max health.
 -- @param ty entitytype
@@ -1140,7 +1184,7 @@ function CppLogic.EntityType.ResourceTreeTypeGetData(ty) end
 -- @param ram resource amount
 function CppLogic.EntityType.ResourceTreeTypeSetData(ty, rety, ram) end
 
---- tree data to replace a tree with a resourcetree.
+--- blocking data of an entitytype.
 -- @param ty entitytype
 -- @return blocking table
 -- @return num blocked points
@@ -1354,6 +1398,11 @@ function CppLogic.EntityType.Building.SetUpradeCost(ty, c, ignoreZeroes) end
 -- @param ty entitytype
 -- @param tech
 function CppLogic.EntityType.Building.AddHPTechMod(ty, tech) end
+
+--- gets the BuildOnTypes of a building type.
+-- @param ty entitytype
+-- @return array of types (may be empty table)
+function CppLogic.EntityType.Building.GetBuildOnTypes(ty) end
 
 --- tech research time and costs.
 -- @param tid tech id
@@ -1656,6 +1705,13 @@ function CppLogic.UI.ContainerWidgetCreateProgressBarWidgetChild(wid, name, befo
 -- @param before (optional) if set, the new widget gets moved before this widget in the mothers list (rendering on top of it)
 -- @return id
 function CppLogic.UI.ContainerWidgetCreateContainerWidgetChild(wid, name, before) end
+
+--- shows a resources gained floating number at a specific entity.
+-- entity has to be visible, but settlers or rocks work fine.
+-- if the entity moves, the floatie does move with it.
+-- @param entity entity defines screen position
+-- @param amount number to show (abs of this int gets shown)
+function CppLogic.UI.ShowResourceFloatieOnEntity(entity, amount) end
 
 --- char entered callback. use string.char to get the character.
 -- does not work with SCELoader.

@@ -356,7 +356,7 @@ function Logic.GetBuildingSleepPlaceLimit(_id) end
 function Logic.GetBuildingSleepPlaceUsage(_id) end
 
 --- Gibt den ersten Gebäudetyp der UpgradeCategory zurück.
-function Logic.GetBuildingTypeByUpgradeCategory(_upCat) end
+function Logic.GetBuildingTypeByUpgradeCategory(_upCat, playerId) end
 
 --- Gibt alle Gebäude in der UpgradeCategory zurück.
 -- return: number, type1, type2, ...
@@ -1142,7 +1142,10 @@ function Logic.SetCurrentDeflation(_player, _rTyp, _def) end
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
 function Logic.SetCurrentInflation(_player, _rTyp, _inf) end
 
---- Setzt die maximalen Arbeiter des Gebäudes. Funktioniert?
+--- Setzt die maximalen Arbeiter des Gebäudes.
+-- nicht syncronisiert (GUI benutzen).
+-- nicht aus der GameCallback_OnBuildingConstructionComplete oder ähnlichem nutzen,
+-- führt zu doppelten einträgen in shok_GGL_CPlayerAttractionHandler.WorkBuildingsArray -> crash on destroy
 function Logic.SetCurrentMaxNumWorkersInBuilding(_id, _maxWorker) end
 
 --- Setzt den Preis des Rohstoffes.
