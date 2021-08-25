@@ -16,7 +16,9 @@ Events.LOGIC_EVENT_ENTITY_DESTROYED = nil
 
 --- angriff (vorher)
 -- ! crasht, wenn entity im trigger stirbt
--- Event.GetEntityID1() und Event.GetEntityID2()
+-- Event.GetEntityID1() attacker und Event.GetEntityID2() target
+-- mit TriggerFix+CppLogic: Event.AttackSource Event.GetPlayerID() attacker player Event.Damage modifyable
+-- Event.GetPlayerID() may have an player set, even if Event.GetEntityID1() is 0
 Events.LOGIC_EVENT_ENTITY_HURT_ENTITY = nil
 
 --- entty in reichweite (entitys/Events.LOGIC_EVENT_ENTITY_IN_RANGE_OF_ENTITY per Logic.AddEntityToEntityDistanceCheck registrieren)  
@@ -50,7 +52,10 @@ Events.LOGIC_EVENT_TRIBUTE_PAID = nil
 Events.LOGIC_EVENT_WEATHER_STATE_CHANGED = nil
 
 --- triggerfix script event. entity getötet (vorher, nach hurt).
--- Event.GetEntityID1() und Event.GetEntityID2()
+-- ohne TriggerFixCppLogicExtension können ids von soldiern inkorrekt sein.
+-- Event.GetEntityID1() attacker und Event.GetEntityID2() target
+-- mit TriggerFix+CppLogic: Event.AttackSource Event.GetPlayerID() attacker player
+-- Event.GetPlayerID() may have an player set, even if Event.GetEntityID1() is 0
 Events.SCRIPT_EVENT_ON_ENTITY_KILLS_ENTITY = nil
 
 --- triggerfix script event.

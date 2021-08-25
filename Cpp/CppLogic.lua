@@ -87,6 +87,9 @@ function CppLogic.Logic.PlayerGetPaydayStartetTick(p) end
 -- @param p player
 -- @param t tick
 function CppLogic.Logic.PlayerSetPaydayStartetTick(p, t) end
+--- sets the time between paydays. (get via Logic).
+-- @param freq frequency in seconds
+function CppLogic.Logic.SetPaydayFrequency(freq) end
 
 --- player kill statistics.
 -- @param p player
@@ -178,7 +181,10 @@ function CppLogic.Logic.LandscapeGetTerrainVertexColor(p) end
 function CppLogic.Logic.LandscapeGetBlocking(p) end
 
 --- enables Events.LOGIC_EVENT_ENTITY_HURT_ENTITY trigger, even if attacker is 0.
-function CppLogic.Logic.EnableAllHurtEntityTrigger() end
+-- also sets the hero as attacker on bomb explode.
+-- @param b enable (optional, default true)
+-- @param killfunc func(attackerid, killid, attackerplayer, source), (optional, default nil)
+function CppLogic.Logic.EnableAllHurtEntityTrigger(b, killfunc) end
 
 --- enables entity max hp to be modified by techs.
 -- does not work with SCELoader.
@@ -188,7 +194,14 @@ function CppLogic.Logic.EnableMaxHPTechMod() end
 
 --- gets the damage that is going to be dealt in a Events.LOGIC_EVENT_ENTITY_HURT_ENTITY trigger.
 -- requires activated CppLogic.Logic.EnableAllHurtEntityTrigger.
+-- with SCELoader, returns only the damage.
+-- damageSource needs different code changes for every damageSource:
+-- - CppLogic.Logic.EnableAllHurtEntityTrigger for Melee, Arrow, Cannonball, AbilityCircularAttack, AbilityBomb, AbilitySabotageXXX, Script.
+-- - CppLogic.Logic.FixSnipeDamage for AbilitySnipe.
+-- - salims trap shows up as unknown (todo?)
 -- @return dmg
+-- @return damageSource
+-- @return attackerPlayer
 function CppLogic.Logic.HurtEntityGetDamage() end
 --- sets the damage that is going to be dealt in a Events.LOGIC_EVENT_ENTITY_HURT_ENTITY trigger.
 -- requires activated CppLogic.Logic.EnableAllHurtEntityTrigger.
@@ -256,6 +269,32 @@ function CppLogic.Logic.FixSnipeDamage(override) end
 -- @return weatherGFX
 function CppLogic.Logic.GetCurrentWeatherGFXState() end
 
+--- sets a func to be called, if a tasklist contains TASK_LUA_FUNC.
+-- define the task as <Task classname="EGL::CTaskArgsInteger" classid="0xb3f8356d"><TaskType>TASK_LUA_FUNC</TaskType> in the tasklist to use it.
+-- <Value> gets passed to your func, to identify what action should be executed.
+-- use the parameter funcs moveto(pos, ignorepathing, noncancelable) and settl(tl) to move the entity or set the task list.
+-- if you use moveto with ignorepathing, make sure the tasklist cannot be cancelled and that the target pos is actually not blocked.
+-- return true, to call the function again next tick (not available if you have used moveto or settl).
+-- do not save&use moveto and settl later, will cause crashes!
+-- do not use moveto if you are repeating the call via return true.
+-- @param func (entityid, value, moveto(p,i,n), settl(tl))->repeat
+function CppLogic.Logic.SetLuaTaskListFunc(func) end
+
+--- changes all occurences of TASK_WAIT_FOR_ANIM to TASK_WAIT_FOR_ANIM_NON_CANCELABLE in the give tasklist.
+-- this prevents new commands canceling the task.
+-- @param tl tasklist
+-- @param tind task index (optional, default -1) id <0 full tasklist gets searched
+function CppLogic.Logic.TaskListMakeWaitForAnimsUnCancelable(tl, tind) end
+--- changes all occurences of TASK_WAIT_FOR_ANIM_NON_CANCELABLE to TASK_WAIT_FOR_ANIM in the give tasklist.
+-- @param tl tasklist
+-- @param tind task index (optional, default -1) id <0 full tasklist gets searched
+function CppLogic.Logic.TaskListMakeWaitForAnimsCancelable(tl, tind) end
+
+--- enables/disables fixing movement tasks when a building is placed on top of a moving entity.
+-- with the fix active, issues a new move task to the same position, instead of potentially skipping the move.
+-- @param f enabled
+function CppLogic.Logic.EnableBuildOnMovementFix(f) end
+
 --- ui command callback.
 -- func parameters are (eventId, eventData, writeback).
 -- function can return true to skip further event execution.
@@ -276,6 +315,10 @@ function CppLogic.API.Eval(code) end
 --- logs a string to the current settlers log.
 -- @param str the string to log
 function CppLogic.API.Log(str) end
+
+--- creates a stack trace of the current executing lua functions.
+-- @return string trace
+function CppLogic.API.StackTrace() end
 
 --- reads a file into a string.
 -- can only read files in data\maps\externalmap\
@@ -315,6 +358,15 @@ function CppLogic.API.SaveGetMapInfo(save) end
 -- keys are split at every \, and put into a layered map.
 -- @return table
 function CppLogic.API.GetGDB() end
+
+--- saves a value in the mainmenu lua state (gets only removed on game restart, not on map load/start).
+-- @param name string key
+-- @param value data to store, only string/number/nil allowed
+function CppLogic.API.RuntimeStoreSet(name, value) end
+--- loads a value from the mainmenu lua state (gets only removed on game restart, not on map load/start).
+-- @param name string key
+-- @return value data
+function CppLogic.API.RuntimeStoreGet(name) end
 
 --- deals damage to a target.
 -- calls respective hurt entity trigger.
@@ -587,10 +639,14 @@ function CppLogic.Entity.SetExploration(id, ex) end
 -- @param ran, (<0 disable)
 function CppLogic.Entity.SetAutoAttackMaxRange(id, ran) end
 
---- overrides a n entities display name.
+--- overrides an entities display name.
 -- @param id entity
 -- @param n, ("" disable)
 function CppLogic.Entity.SetDisplayName(id, n) end
+--- gets the display name of an entity.
+-- @param id entity
+-- @return name
+function CppLogic.Entity.GetDisplayName(id) end
 
 --- clones all overrides.
 -- @param from entity (can be id of last destroyed entity)
@@ -853,6 +909,16 @@ function CppLogic.Entity.Settler.SetPosition(id, p) end
 -- @param enabl bool
 function CppLogic.Entity.Settler.EnableRangedEffectSoldierHeal(enabl) end
 
+--- gets the target of a heros shuriken ability.
+-- @param id
+-- @return tid
+function CppLogic.Entity.Settler.ShurikenGetTarget(id) end
+
+--- gets the target of a heros sniper ability.
+-- @param id
+-- @return tid
+function CppLogic.Entity.Settler.SniperGetTarget(id) end
+
 --- a leaders experience.
 -- @param id leader
 -- @return xp
@@ -945,7 +1011,7 @@ function CppLogic.Entity.Building.MarketGetCurrentTradeData(id) end
 function CppLogic.Entity.Building.MarketSetCurrentTradeData(id, bty, sty, bam, sam, pam) end
 
 --- starts building a cannon.
--- does not check all parameters, or if foundry is ready.
+-- uses resources, asserts if it cannot build.
 -- @param id foundry entity
 -- @param ty cannon type
 function CppLogic.Entity.Building.CommandFoundryBuildCannon(id, ty) end
@@ -1059,6 +1125,14 @@ function CppLogic.Entity.Building.GetConstructionSite(id) end
 -- @return id or 0
 function CppLogic.Entity.Building.ConstructionSiteGetBuilding(id) end
 
+--- buys a leader in a barracks by entitytype.
+-- uses resources, asserts if not possible.
+-- @param id barracks
+-- @param ety leader type
+-- @param checkType check if leader type can be recruited at this barracks upgradecategory (optional, default false)
+-- @return id
+function CppLogic.Entity.Building.BarracksBuyLeaderByType(id, ety, checkType) end
+
 
 --- entity type max health.
 -- @param ty entitytype
@@ -1149,7 +1223,7 @@ function CppLogic.EntityType.GetArmor(ty) end
 -- @param ty entitytype
 -- @param ar armor
 -- @param acl armorclass
-function CppLogic.EntityType.GetArmor(ty, ar, acl) end
+function CppLogic.EntityType.SetArmor(ty, ar, acl) end
 
 --- settler or building type armor modifier techs.
 -- @param ty entitytype
@@ -1171,8 +1245,12 @@ function CppLogic.EntityType.GetModels(ty) end
 -- @param m1 model 1 (optional)
 -- @param m2 model 2 (optional)
 -- @param m3 model 3 (optional)
-function CppLogic.EntityType.GetModels(ty, m0, m1, m2, m3) end
+function CppLogic.EntityType.SetModels(ty, m0, m1, m2, m3) end
 
+--- checks it a entitytype can be replaced with a resourcetree.
+-- @param ty entitytype
+-- @return bool
+function CppLogic.EntityType.ResourceTreeTypeHasData(ty) end
 --- tree data to replace a tree with a resourcetree.
 -- @param ty entitytype
 -- @return resource entitytype
@@ -1186,8 +1264,9 @@ function CppLogic.EntityType.ResourceTreeTypeSetData(ty, rety, ram) end
 
 --- blocking data of an entitytype.
 -- @param ty entitytype
--- @return blocking table
--- @return num blocked points
+-- @return blocking table (array of {pos,pos})
+-- @return num blocked points (number)
+-- @return buildblock ({pos,pos} or nil)
 function CppLogic.EntityType.GetBlocking(ty) end
 
 --- settler or building type exploration modifier techs.
@@ -1284,6 +1363,7 @@ function CppLogic.EntityType.Settler.SetAbilityDataCircularAttack(ty, dmg, dcl, 
 -- @return range
 -- @return max arc degree
 -- @return recharge time
+-- @return effectTypeID
 function CppLogic.EntityType.Settler.GetAbilityDataShuriken(ty) end
 --- entitytytpe shuriken ability data.
 -- @param ty entitytype
@@ -1308,7 +1388,7 @@ function CppLogic.EntityType.Settler.GetAbilityDataSniper(ty) end
 -- @param dfac damage factor
 -- @param ran range
 -- @param rech recharge time
-function CppLogic.EntityType.Settler.GetAbilityDataSniper(ty, dfac, ran, rech) end
+function CppLogic.EntityType.Settler.SetAbilityDataSniper(ty, dfac, ran, rech) end
 
 --- entitytytpe sniper ability data.
 -- damage is facto * max hp of target.
@@ -1641,6 +1721,15 @@ function CppLogic.UI.ButtonSetShortcutString(wid, str, isSTTKey) end
 -- @param group group name
 function CppLogic.UI.WidgetSetGroup(wid, group) end
 
+--- removes a widget.
+-- @param wid widget
+function CppLogic.UI.RemoveWidget(wid) end
+
+--- gets a widgets name.
+-- @param wid widget
+-- @return name
+function CppLogic.UI.GetWidgetName(wid) end
+
 
 --- creates a new static widget and registers it as its child.
 -- the widget is initially hidden and all variables at a default value.
@@ -1739,6 +1828,23 @@ function CppLogic.UI.SetKeyTrigger(f) end
 -- set to nil to remove.
 -- @param f func to be called
 function CppLogic.UI.SetMouseTrigger(f) end
+--- same as CppLogic.UI.SetMouseTrigger, just designed for mainmenu
+function CppLogic.UI.SetMouseTriggerMainMenu(f) end
+
+--- gets the main windows client size.
+-- == GUI.GetScreenSize(), but available in main menu.
+-- @return right
+-- @return bottom
+function CppLogic.UI.GetClientSize() end
+
+--- checks if a widget is a container widget.
+-- @param wid
+-- @return true/false
+function CppLogic.UI.IsContainerWidget(wid) end
+
+--- resets the global CppLogic.
+-- useful if you dont want to use FrameworkWrapper to prevent savegames to override it.
+function CppLogic_ResetGlobal() end
 
 --- @class UACore
 local UACore = {}
