@@ -196,10 +196,9 @@ function Logic.DisableCanBuyResource(_player, _resType) end
 -- Verhindert den Verkauf von Rohstoffen.
 function Logic.DisableCanSellResource(_player, _resType) end
 
---- !!! democopy
--- Führt einen Sofortigen Handel durch.
+--- scheint nicht zu funktionieren.
 -- return: 1/0 Handel Erfolgreich
-function Logic.DoInstantTransaction(_marketId, _resTypeSell, _resTypeBuy, _amountBuy) end
+function Logic.DoInstantTransaction(_playerid, _resTypeSell, _resTypeBuy, _amountBuy) end
 
 --- Startet einen normalen Handel.
 function Logic.DoTransaction(_buildingID, _sellResourceType, _buyResourceType, _buyResourceAmount) end

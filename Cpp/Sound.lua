@@ -7,7 +7,11 @@ Sound = {
     Pause3D = function()end,
     PauseAll = function()end,
     Play2DQueuedSound = function()end,
-    Play2DSound = function()end,
+    --- plays a sound (used by warning for questinfo)
+    ---@param soundid number sound id
+    ---@param loopedFlag number 0/1
+    ---@param volume number|nil optional, default 127
+    Play2DSound = function(soundid, loopedFlag, volume)end,
     PlayFeedbackSound = function()end,
     PlayGUISound = function()end,
     PlayQueuedFeedbackSound = function()end,
