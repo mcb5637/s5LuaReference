@@ -791,11 +791,12 @@ function Logic.GetWeatherState() end
 -- Gibt den Arbeitertyp des Gebäudes zurück.
 function Logic.GetWorkerTypeByBuilding(_id) end
 
---- Setzt einen Patroullien Punkt für eine militärische Einheit 
--- (WICHTIG: Um die Einheit auf Patroullie gehen zu lassen muss auch noch Logic.GroupPatrol aufgerufen werden)
--- _id 
--- _positionX
--- _positionY
+--- Fügt einen Punkt zu einer mit Logic.GroupPatrol begonnen Patroullie hinzu.  
+--- Reihenfolge bei Punkten S (aktuelle pos bei Logic.GroupPatrol), P (ziel von Logic.GroupPatrol) und AP (Logic.GroupAddPatrolPoint):  
+--- S -> P -> AP -> P -> S -> P -> AP...  
+--- @param _id number leader id
+--- @param _positionX number
+--- @param _positionY number
 function Logic.GroupAddPatrolPoint(_id, _positionX, _positionY) end
 
 --- Befiehlt _id (und seinen Soldiers) _target anzugreifen.
@@ -813,11 +814,11 @@ function Logic.GroupDefend(_id) end
 -- ! Bleibt teilweise einfach stehen, insbesondere wenn _id schneller ist als _target
 function Logic.GroupGuard(_id, _target) end
 
---- Schickt eine militärische Einheit auf Patroullie; 
---  sofern nicht durch Logic.GroupAddPatrolPoint erweitert nur zwischen aktueller Position und angegebener Position
--- _id
--- _positionX
--- _positionY
+--- Beginnt eine Patroullie für eine Militäreinheit zwischen der Aktuellen und der Zielposition.  
+--- Mit Logic.GroupAddPatrolPoint können weitere Punkte hinzugefügt werden.  
+--- @param _id number leader id
+--- @param _positionX number
+--- @param _positionY number
 function Logic.GroupPatrol(_id, _positionX, _positionY) end
 
 --- _id bleibt stehen und bewegt sich auch nicht, wenn es angegriffen wird.
