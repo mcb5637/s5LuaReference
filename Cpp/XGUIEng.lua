@@ -99,6 +99,7 @@ function XGUIEng.SetLinesToPrint(_widget, _firstLine, _numberLines) end
 function XGUIEng.SetMaterialColor(_widget, _state, _r, _g, _b, _a) end
 
 --- Setzt die Textur eines Widgets (Nicht den Teil der Textur, der angezeigt wird...)
+-- textur wird erst beim anzeigen geladen.
 -- _state: 0->Normal, 1->Mouseover, 2->Geklickt, 3->Highlightmodus ??  Disabled?? twa:6 states?? guiEditor:5 states ??
 function XGUIEng.SetMaterialTexture(_widget, _state, _file) end
 

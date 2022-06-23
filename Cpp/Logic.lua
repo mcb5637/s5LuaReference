@@ -415,7 +415,7 @@ function Logic.GetDiplomacyState(_player1, _player2) end
 --- Gibt die benötigte Wetterturm-Energie für einen Wetterwechsel zurück.
 function Logic.GetEnergyRequiredForWeatherChange() end
 
---- Gibt Entities des Typs zurück. (maximal ca. 40)
+--- Gibt Entities des Typs zurück. (maximal 16)
 -- return: number, id1, id2, ...
 function Logic.GetEntities(_type,_max) end
 

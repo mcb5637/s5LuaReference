@@ -60,6 +60,8 @@ function Framework.GetMapNameAndDescription(_name, _type, _cName) end
 function Framework.GetMapNames(_startIndex, _number, _type, _cName) end
 
 --- Gibt den Pfad zur Mapvorschautextur zurück.
+-- bei einer s5x immer 'data\\graphics\\Textures\\GUI\\MapPics\\externalmap', egal was in der info.xml steht.
+-- bei einer s5x wird außerdem die textur aus der s5x geladen.
 function Framework.GetMapPreviewMapTextureName(_name, _type, _cName) end
 
 --- Gibt die Anzahl der Maps zurück.
