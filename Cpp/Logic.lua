@@ -693,12 +693,17 @@ function Logic.GetResourceDoodadGoodType(_id) end
 -- 0 -> Blocking
 -- gleicher Sektor -> gibt einen Weg zwischen beiden.
 -- unterschiedlicher Sektor -> kein Weg (Zugbrücken werden anscheinend nicht beachtet...)
+---@param _entityId number
+---@return number sectorId
 function Logic.GetSector(_entityId) end
 
 --- Berechnet die Kosten für den Handel.
 function Logic.GetSellAmount(_player, _selltype, _buyType, _buyAmount) end
 
 --- Gibt den aktuellen Leadertyp des Players zurück.
+---@param _upCat number
+---@param _player number
+---@return number
 function Logic.GetSettlerTypeByUpgradeCategory(_upCat, _player) end
 
 --- Gibt die Siedlertypen in dieser Upgradecategory zurück.
@@ -1028,6 +1033,8 @@ function Logic.LeaderGetOneSoldier(_id) end
 function Logic.LeaderGetSoldierUpgradeCategory(_id) end
 
 --- Gibt den EntityType der Soldiers dieses Leaders zurück.
+---@param _id number
+---@return number
 function Logic.LeaderGetSoldiersType(_id) end
 
 --- ???

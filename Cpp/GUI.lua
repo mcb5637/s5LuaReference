@@ -223,6 +223,7 @@ function GUI.GetMousePosition() end
 function GUI.GetPlayerColor(_player) end
 
 --- Gibt den Player zurück, der gerade gesteuert wird (eigentlich immer 1)
+---@return number
 function GUI.GetPlayerID() end
 
 --- Gibt screenBreite, screenHoehe zurück

@@ -38,5 +38,5 @@ CEntity = {
     SetMovementSpeed = function()end,
     SetTechnologyInResearch = function()end,
     TriggerGetDamage = function()end,
-    TriggerSetDamage = function()end,
+    TriggerSetDamage = function(dmg)end,
 }

@@ -12,8 +12,12 @@ Sound = {
     ---@param loopedFlag number 0/1
     ---@param volume number|nil optional, default 127
     Play2DSound = function(soundid, loopedFlag, volume)end,
-    PlayFeedbackSound = function()end,
-    PlayGUISound = function()end,
+    ---@param soundid number sound id
+    ---@param volume number|nil optional, default 127
+    PlayFeedbackSound = function(soundid, volume)end,
+    ---@param soundid number sound id
+    ---@param volume number|nil optional, default 127
+    PlayGUISound = function(soundid, volume)end,
     PlayQueuedFeedbackSound = function()end,
     PlaySound = function()end,
     PlaySoundPos = function()end,

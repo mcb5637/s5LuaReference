@@ -38,9 +38,12 @@ function Framework.GameResult_Update() end
 function Framework.GetCDPath(_file) end
 
 --- Gibt den Namen der aktuellen Map zurück (ohne .s5x).
+---@return string
 function Framework.GetCurrentMapName() end
 
 --- Gibt den Maptyp und den Kanpangienname zurück.
+---@return number
+---@return string
 function Framework.GetCurrentMapTypeAndCampaignName() end
 
 --- Gibt den Index der Map zurück.
