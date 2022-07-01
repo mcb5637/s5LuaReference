@@ -1,7 +1,8 @@
 --- table mit allen BlessGategories
-BlessCategories = {}
-BlessCategories.Canonisation = nil
-BlessCategories.Construction = nil
-BlessCategories.Financial = nil
-BlessCategories.Research = nil
-BlessCategories.Weapons = nil
+BlessCategories = {
+	Canonisation = 5,
+	Construction = 1,
+	Financial = 4,
+	Research = 2,
+	Weapons = 3,
+}

@@ -1,9 +1,10 @@
 --- Schadensklassen
-DamageClasses = {}
-DamageClasses.DC_Bullet = nil
-DamageClasses.DC_Chaos = nil
-DamageClasses.DC_Evil = nil
-DamageClasses.DC_Hero = nil
-DamageClasses.DC_Pierce = nil
-DamageClasses.DC_Siege = nil
-DamageClasses.DC_Strike = nil
+DamageClasses = {
+	DC_Bullet = 7,
+	DC_Chaos = 3,
+	DC_Evil = 6,
+	DC_Hero = 5,
+	DC_Pierce = 2,
+	DC_Siege = 4,
+	DC_Strike = 1,
+}

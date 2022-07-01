@@ -233,6 +233,7 @@ function GUI.GetScreenSize() end
 function GUI.GetSelectedEntities() end
 
 --- gibt das erste selektierte Entity zurück. (Normalerweise werden die Widgest von diesem Angezeigt, Ausnahme: Helden)
+---@return number
 function GUI.GetSelectedEntity() end
 
 --- ! Gibt die stateId des stateNames zurück.
