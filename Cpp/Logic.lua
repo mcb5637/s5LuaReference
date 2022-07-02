@@ -31,23 +31,26 @@ function Logic.AddEntityToEntityDistanceCheck(_entity1, _entity2, _distance, _ev
 function Logic.AddMercenaryOffer(_id, _entityType, _amount, _resourceType1, _cost1, ...) end
 
 --- Fügt einen Quest den Aufträgen des Spielers der angegebenen _playerId hinzu.
--- _id: Eine Zahl von 1-9 die den Quest repräsentiert.
--- _type: Der Quest-Typ, welcher das Symbol des Quests im Auftragsmenü verändert.
--- Möglichkeiten: MAINQUEST_OPEN, MAINQUEST_CLOSED, SUBQUEST_OPEN, SUBQUEST_CLOSED
--- _name: Der Name der Quest im Auftragsbuch als string.
--- _description: Die Quest-Beschreibung als string.
--- _info: Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an
-function Logic.AddQuest(_playerId, _id, _type, _name, _description, _info) end
+--- wenn eine questid schon benutzt ist, wird die vorherige quest überschrieben.
+---@param _playerId number
+---@param _questId number
+---@param _type number Der Quest-Typ, welcher das Symbol des Quests im Auftragsmenü verändert. Möglichkeiten: MAINQUEST_OPEN, MAINQUEST_CLOSED, SUBQUEST_OPEN, SUBQUEST_CLOSED
+---@param _title string Der Name der Quest im Auftragsbuch als string (StringTableTextKey oder direkter string)
+---@param _text string Die Quest-Beschreibung als string  (StringTableTextKey oder direkter string)
+---@param _info number|nil Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an (wenn _name ein sttKey ist, wird er im tooltip angezeigt) (default 0)
+function Logic.AddQuest(_playerId, _questId, _type, _title, _text, _info) end
 
 --- Wie AddQuest, nur mit Position, zu der gesprungen wird, wenn auf die Questbenachrichtigung geklickt wird.
--- _player: Wessen Quest? Was anderes als 1 macht keinen Sinn.
--- _questId: Einzigartige QuestId für diese Quest.
--- _type: Questtyp: MAINQUEST_OPEN, MAINQUEST_CLOSED, SUBQUEST_OPEN, SUBQUEST_CLOSED
--- _title: Titel der Quest, neben dem Symbol im Questmenü angezeigt.
--- _text: Beschreibung der Quest.
--- _posX, _posY: Die Sprungposition.
--- _info: Questbenachrichtigung anzeigen (0 = aus, 1 = an)
-function Logic.AddQuestEx(_player, _questId, _type, _title, _text, _posX, _posY, _info) end
+--- wenn eine questid schon benutzt ist, wird die vorherige quest überschrieben.
+---@param _playerId number
+---@param _questId number
+---@param _type number Der Quest-Typ, welcher das Symbol des Quests im Auftragsmenü verändert. Möglichkeiten: MAINQUEST_OPEN, MAINQUEST_CLOSED, SUBQUEST_OPEN, SUBQUEST_CLOSED
+---@param _title string Der Name der Quest im Auftragsbuch als string (StringTableTextKey oder direkter string)
+---@param _text string Die Quest-Beschreibung als string  (StringTableTextKey oder direkter string)
+---@param _posX number
+---@param _posY number
+---@param _info number|nil Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an (wenn _name ein sttKey ist, wird er im tooltip angezeigt) (default 0)
+function Logic.AddQuestEx(_playerId, _questId, _type, _title, _text, _posX, _posY, _info) end
 
 --- Verworfen, Logic funktioniert noch, GUI fehlt.
 --- Fügt eine Tech zum kauf hinzu.
@@ -60,14 +63,22 @@ function Logic.AddQuestEx(_player, _questId, _type, _title, _text, _posX, _posY,
 function Logic.AddTechOffer(_id, _techType, _amount, _resourceType1, _cost1, ...) end
 
 --- Gibt einem Spieler Rohstoffe.
--- _resourceType: ResourceType.XXX
+---@param _player number
+---@param _resourceType number ResourceType.XXX
+---@param _amount number
 function Logic.AddToPlayersGlobalResource(_player, _resourceType, _amount) end
 
 --- Fügt einen Tribut hinzu. Es wird nicht geprüft, wann dieser bezahlt wurde! (Siehe SetupTributePaid oder Events.LOGIC_EVENT_TRIBUTE_PAID)
--- _0 muss 0 sein
--- _tributeId: einzigartig für diesen Spieler
--- _resourceType, _cost: Die Kosten (Bis zu 6 Rohstofftypen, abwechselnd ResourceType.xxx und Kosten dieses Typs)
-function Logic.AddTribute(_player, _tributeId, _0, _0, _text, _resourceType1, _cost1, ...) end
+--- wenn dieselbe id wiederverwendet wird, werden die daten vom tribut überschrieben.
+---@param _player number
+---@param _tributeId number einzigartig für diesen Spieler
+---@param _ownerEntityId number unbekannt, was das macht, sollte 0 sein
+---@param _offeringPlayerId number unbekannt, was das macht, sollte 0 sein
+---@param _text string anzeigetext im tributmenü, StringTableTextKey oder direkter string
+---@param _resourceType1 number
+---@param _cost1 number
+---@param ... number Die Kosten (Bis zu 6 Rohstofftypen, abwechselnd ResourceType.xxx und Kosten dieses Typs)
+function Logic.AddTribute(_player, _tributeId, _ownerEntityId, _offeringPlayerId, _text, _resourceType1, _cost1, ...) end
 
 --- Ändert das Wetter.
 -- Periodische Wettereffekte werden einer nach dem anderen (einfügereihenfolge) in Endlosschleife ausgeführt,
@@ -80,9 +91,9 @@ function Logic.AddTribute(_player, _tributeId, _0, _0, _text, _resourceType1, _c
 -- _transition: Dauer des Übergangs 
 function Logic.AddWeatherElement(_state,_duration,_periodic,_gfxset,_forerun,_transition) end
 
---- !!! Democopy
--- Kann der Spieler (von der Motivation her) neue Entitys erhalten?
--- return: 0,1 => neue Entities, keine neuen Entities
+--- Kann der Spieler (von der Motivation her) neue Entitys erhalten?
+---@param _player number
+---@return number flag
 function Logic.AreVillageCentersLocked(_player) end
 
 --- Lässt eine Kaserne,Schießstand,Reiterei einen Leader des angegebenen Typs ausbilden.
@@ -334,15 +345,15 @@ function Logic.GetAlarmRechargeTimeInPercent(_player) end
 function Logic.GetAllPlayerEntities(_player, _max) end
 
 --- Gibt alle Quest-Ids des Spielers zurück.
--- return: ???
--- table {id1, id2, ...} oder
--- anzahlGefunden, id1, id2, ...
+---@return number amount
+---@return number id1 ...
+---@param _player any
 function Logic.GetAllQuests(_player) end
 
 --- Gibt alle Tribut-Ids des Spielers zurück.
--- return: ???
--- table {id1, id2, ...} oder
--- anzahlGefunden, id1, id2, ...
+---@param _player number
+---@return number amount
+---@return number id1 ...
 function Logic.GetAllTributes(_player) end
 
 --- Gibt die mit diesem Gebäude verknüpften "Esser" zurück.
@@ -367,7 +378,8 @@ function Logic.GetAttachedWorkersToBuilding(_id) end
 function Logic.GetAttractionLimitValueByEntityType(_eTyp) end
 
 --- Gibt die durchschnittliche Motivation zurück.
--- return: 1-> 100% Motivation
+---@return number moti 1-> 100% Motivation (0 bei fehler)
+---@param _player number
 function Logic.GetAverageMotivation(_player) end
 
 --- Verworfen
@@ -380,8 +392,25 @@ function Logic.GetBattleSerfSecondsLeft() end
 -- immer gleich, da jede Segnung genau 5000 Glauben (ResourceType.Faith) benötigt
 function Logic.GetBlessCostByBlessCategory(_blessCat) end
 
---- !!! democopy
--- Gibt ein table mit Segnungskosten zurück.
+--- Gibt die segnungskosten zurück.
+--- local t = {Logic.GetBlessingCosts()} sollte ein notmales CostInfo table ergeben.
+---@return number rty1
+---@return number rty2
+---@return number rty3
+---@return number rty4
+---@return number rty5
+---@return number rty6
+---@return number rty7
+---@return number rty8
+---@return number rty9
+---@return number rty10
+---@return number rty11
+---@return number rty12
+---@return number rty13
+---@return number rty14
+---@return number rty15
+---@return number rty16
+---@return number rty17
 function Logic.GetBlessingCosts() end
 
 --- Gibt die Schadensklasse des Gebäudes zurück.
@@ -477,7 +506,9 @@ function Logic.GetCurrentTurn() end
 function Logic.GetDefendersSlotsAvailable(_id) end
 
 --- Gibt die Beziehung zwischen den Spielern zurück.
--- return: Diplomacy.XXX
+---@param _player1 number
+---@param _player2 number
+---@return number state Diplomacy.XXX (0 bei fehler)
 function Logic.GetDiplomacyState(_player1, _player2) end
 
 --- Gibt die benötigte Wetterturm-Energie für einen Wetterwechsel zurück.
@@ -592,23 +623,23 @@ function Logic.GetLeaderTrainingAtBuilding(_buildingId) end
 function Logic.GetLeadersGroupAttractionLimitValue(_id) end
 
 --- Gibt die Motivation zurück, ab der ein Siedler verärgert ist.
--- return: 1 -> 100%? Normal = 0.7
+---@return number moti 1 -> 100%? Normal = 0.7
 function Logic.GetLogicPropertiesMotivationThresholdAngry() end
 
 --- Gibt die Motivation zurück, ab der ein Siedler glücklich ist.
--- return: 1 -> 100%? Normal = 1.5
+---@return number moti 1 -> 100%? Normal = 1.5
 function Logic.GetLogicPropertiesMotivationThresholdHappy() end
 
 --- Gibt die Motivation zurück, ab der die Siedler verschwinden.
--- return: 1 -> 100%? Normal = 0.25
+---@return number moti 1 -> 100%? Normal = 0.25
 function Logic.GetLogicPropertiesMotivationThresholdLeave() end
 
 --- Gibt die Motivation zurück, ab der ein Siedler traurig ist.
--- return: 1 -> 100%? Normal = 1
+---@return number moti 1 -> 100%? Normal = 1
 function Logic.GetLogicPropertiesMotivationThresholdSad() end
 
 --- Gibt die Motivation zurück, ab der keine neuen Siedler erscheinen.
--- return: 1 -> 100%? Normal = 0.3
+---@return number moti 1 -> 100%? Normal = 0.3
 function Logic.GetLogicPropertiesMotivationThresholdVCLock() end
 
 --- Gibt die maximal verfügbaren Verteidiger (= Arbeiter) zurück, die hier Platz finden.
@@ -636,7 +667,9 @@ function Logic.GetMaxNumberOfResidents(id) end
 --- Gibt den maximalen Glaubenswert des Spielers zurück.
 function Logic.GetMaximumFaith(_player) end
 
---- Gibt die maximale möglichen menschlichen Spieler zurück (Multiplayer).
+--- Gibt die maximale möglichen Spieler zurück.
+--- immer 8.
+---@return number am 8
 function Logic.GetMaximumNumberOfPlayer() end
 
 --- Gibt Informationen über das Söldnerangebot zurück und schreibt die Kosten in _t.
@@ -684,15 +717,25 @@ function Logic.GetNextWorkerWithoutFarmOrResidence(_player, _worker) end
 function Logic.GetNextWorkerWithoutResidence(_player, _worker) end
 
 --- Gibt die aktuelle Anzahl der Siedler (VC-Platze relevant) dieses players zurück.
+--- zählt jeden siedler als 1, unabhängig von seinen VC platz kosten.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetNumberOfAttractedSettlers(_player) end
 
 --- Gibt die aktuelle Anzahl der Soldaten eines players zurück.
+--- Zählt leader und soldiers.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetNumberOfAttractedSoldiers(_player) end
 
 --- Gibt die aktuelle Anzahl der Arbeiter eines players zurück.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetNumberOfAttractedWorker(_player) end
 
 --- Gibt die noch am HQ kaufbaren Helden zurück. (Original aus im MP)
+---@param _playerId number
+---@return number amount (0 bei fehler)
 function Logic.GetNumberOfBuyableHerosForPlayer(_playerId) end
 
 --- Gibt die Anzahl der Entities dieses Typs zurück.
@@ -710,18 +753,27 @@ function Logic.GetNumberOfEntitiesOfTypeOfPlayer(_player, _eTyp) end
 function Logic.GetNumberOfIdleSerfs(_player) end
 
 --- Gibt die Anzahl der Leader eines players zurück.
+---@param _player number
+---@return number amount (0 bei felher)
 function Logic.GetNumberOfLeader(_player) end
 
 --- Gibt die Anzahl der Arbeiter eines Players und Typs zurück.
+---@param _player number
+---@param _eTyp number
+---@return number amount (0 bei felher)
 function Logic.GetNumberOfPlayersWorkerOfType(_player, _eTyp) end
 
 --- Gibt die Anzahl der Siedler dieses Spielers zurück.
 function Logic.GetNumberOfSettlers(_player) end
 
 --- Gibt die Anzahl der Arbeiter ohne Essensplatz zurück.
+---@param _player number
+---@return number amount (0 bei felher)
 function Logic.GetNumberOfWorkerWithoutEatPlace(_player) end
 
 --- Gibt die Anzahl der Arbeiter ohne Schlafplatz zurück.
+---@param _player number
+---@return number amount (0 bei felher)
 function Logic.GetNumberOfWorkerWithoutSleepPlace(_player) end
 
 --- Gibt die Anzahl der Söldnerangebote zurück.
@@ -735,15 +787,23 @@ function Logic.GetNumerOfMerchantOffers(_buildingId) end
 function Logic.GetOvertimeRechargeTimeAtBuilding(_id) end
 
 --- Gibt die Maximale Anzahl an VC-Plätzen zurück.
+---@param _player number
+---@return number limit (0 bei fehler)
 function Logic.GetPlayerAttractionLimit(_player) end
 
 --- Gibt die Aktuelle VC-Belegung zurück.
+---@param _player number
+---@return number usage (0 bei fehler)
 function Logic.GetPlayerAttractionUsage(_player) end
 
 --- Gibt die aktuell genutzten Essensplätze zurück.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetPlayerEatPlaceUsage(_player) end
 
 --- Gibt die maximalen Essensplätze zurück.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetPlayerEatPlacesLimit(_player) end
 
 --- Gibt Entities nach player und Typ zurück.
@@ -767,38 +827,60 @@ function Logic.GetPlayerEntities(_playerId, _entityType, _amount) end
 ---@return number id1 ...
 function Logic.GetPlayerEntitiesInArea(_playerId, _entityType, _posX, _posY, _range, _amount, accessCategory) end
 
---- ??? Bezahlte Arbeiter?
-function Logic.GetPlayerNumberOfPaidWorker() end
+--- == Logic.GetNumberOfAttractedWorker
+---@param _player number
+---@return number amount (0 bei fehler)
+function Logic.GetPlayerNumberOfPaidWorker(_player) end
 
 --- Gibt die zu erwartenden Steuern zurück. (ohne Leaderkosten)
+---@param _player number
+---@return number taxes (0 bei fehler)
 function Logic.GetPlayerPaydayCost(_player) end
 
---- Gibt die Zeit zwischen zwei Zahltagen zurück.
+--- Gibt die Zeit zwischen zwei Zahltagen zurück. (1/100 ticks).
+---@param _player number
+---@return number time (0 bei fehler)
 function Logic.GetPlayerPaydayFrequency(_player) end
 
 --- Gibt den zu erwartenden Sold für die Leader zurück.
+---@param _player number
+---@return number pay (0 bei fehler)
 function Logic.GetPlayerPaydayLeaderCosts(_player) end
 
---- Gibt die Zeit bis zum nächsten Zahltag zurück.
+--- Gibt die Zeit bis zum nächsten Zahltag zurück. (1/100 ticks).
+---@param _player number
+---@return number time (0 bei fehler)
 function Logic.GetPlayerPaydayTimeLeft(_player) end
 
 --- Muss der Spieler seine Hauptmänner bezahlen?
--- return: 1/0
+---@param _player number
+---@return number flag (0 bei fehler)
 function Logic.GetPlayerPaysLeaderFlag(_player) end
 
---- Gibt die (aktuellen ?) Steuern pro Arbeiter zurück.
+--- Gibt die aktuellen Steuern pro Arbeiter zurück.
+---@param _player number
+---@return number tax (0 bei fehler)
 function Logic.GetPlayerRegularTaxPerWorker(_player) end
 
 --- Gibt die aktuell genutzten Schlafplätze zurück.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetPlayerSleepPlaceUsage(_player) end
 
 --- Gibt die maximalen Schlafplätze zurück.
+---@param _player number
+---@return number amount (0 bei fehler)
 function Logic.GetPlayerSleepPlacesLimit(_player) end
 
---- Gibt die durch LevyTaxes gewonnenen Steuern zurück. (verworfen, funktionstüchtig)
+--- Gibt die sondersteuern zurück (GUI.LevyTax).
+---@param _player number
+---@return number tax (0 bei fehler)
 function Logic.GetPlayerTaxIncome(_player) end
 
 --- Gibt die aktuell vorhandene Rohstoffmenge zurück. Unterschied zwischen Roh und Veredelt.
+---@param _player number
+---@param _resTyp number ResourceType.XXX
+---@return number am (0 bei fehler)
 function Logic.GetPlayersGlobalResource(_player, _resTyp) end
 
 --- Gibt eine pseudozufällige Zahl zwischen 0 und _max aus.
@@ -811,6 +893,8 @@ function Logic.GetRangedEffectDuration(_id) end
 function Logic.GetRangedEffectTimeLeft(_id) end
 
 --- Gibt zu einem Rohstofftyp den unveredelten Rohstofftyp zurück.
+---@param _resTyp number
+---@return number rawType
 function Logic.GetRawResourceType(_resTyp) end
 
 --- Gibt die Zeit aus, in der das Gebäude noch ausgebaut wird.
@@ -875,12 +959,14 @@ function Logic.GetSoldiersAttachedToLeader(_id) end
 -- return: resTyp, amount
 function Logic.GetStolenResourceInfo(_id) end
 
---- Gibt die Steuermenge eines Arbeiters zurück ?
--- Steueränderungen???
+--- Gibt die Ssondersteuermenge eines Arbeiters zurück (GUI.LevyTax).
+--- Logic.SetPlayerTaxAmountFactor ist nicht mit einberechnet.
+---@return number tax
 function Logic.GetTaxAmountOfWorker() end
 
 --- Gibt die Höhe der Steuern zurück.
--- return: 0-4
+---@return number tl (0-4)
+---@param _player number (crash wenn kein spieler)
 function Logic.GetTaxLevel(_player) end
 
 --- Gibt Informationen über den Technologiehandel zurück und schreibt dessen Kosten in _t.
@@ -927,7 +1013,27 @@ function Logic.GetTotalUpgradeTimeForBuilding(_id) end
 -- return: 0-100 (100 -> gerade kein Handel)
 function Logic.GetTransactionProgress(_id) end
 
---- Gibt ein table mit den Tributkosten zurück ??
+--- Gibt die Tributkosten zurück.
+--- local costinfo = {Logic.GetTributeCosts(...)}; sollte ein brauchbares CostInfo table sein.
+---@param _player number
+---@param _tribId number
+---@return number rty1
+---@return number rty2
+---@return number rty3
+---@return number rty4
+---@return number rty5
+---@return number rty6
+---@return number rty7
+---@return number rty8
+---@return number rty9
+---@return number rty10
+---@return number rty11
+---@return number rty12
+---@return number rty13
+---@return number rty14
+---@return number rty15
+---@return number rty16
+---@return number rty17
 function Logic.GetTributeCosts(_player, _tribId) end
 
 --- Gibt die UpgradeCategory zurück, in der das Gebäude ist.
@@ -1118,9 +1224,10 @@ function Logic.IsMerchantOpened(_id, _player) end
 ---@return number flag (0 bei fehler)
 function Logic.IsOvertimeActiveAtBuilding(_id) end
 
---- !!! democopy
--- Gibt zurück, ob dieser Spieler noch Platz im VC hat.
--- return: 1/0
+--- Gibt zurück, ob dieser Spieler neue Seiedler bekommen kann.
+--- Tested VC Plätze, sowie Motivation. Immer 1 für AI spieler.
+---@param _player number
+---@return number flag (0 bei fehler)
 function Logic.IsPlayerAttractionSlotAvailable(_player) end
 
 --- Gibt zurück, ob Entities im Gebiet sind.
@@ -1259,42 +1366,57 @@ function Logic.MoveEntity(_entityId, _posX, _posY) end
 function Logic.MoveSettler(_id, _posX, _posY) end
 
 --- Gibt den Status des Spielers zurück.
--- return: !!! democopy
 -- 	0-> nicht im Spiel
 -- 	1-> Spielt
 -- 	2-> Gewonnen
 -- 	3-> Verloren
 -- 	4-> Verlassen (Verbundungsabbruch MP)
+---@param _player number
+---@return number status
 function Logic.PlayerGetGameState(_player) end
 
---- !!! democopy
--- Gibt den Zeitpunkt zurück, an dem der Satus des Spielers geändert wurde. (oder 0)
+--- Gibt den Zeitpunkt zurück, an dem der Satus des Spielers geändert wurde. (oder 0)
 -- (in 1/10 sec)
+---@param _player number
+---@return number ticks
 function Logic.PlayerGetGameStateChangedTime(_player) end
 
 --- Gibt zurück, ob der Player das Spiel verlassen hat.
--- return: 1/0
+---@param _player number
+---@return number flag
 function Logic.PlayerGetLeftGameFlag(_player) end
 
---- Verteilt alle Arbeiter neu auf die Gebäude.
+--- Verteilt alle Arbeiter sofort neu auf die Gebäude.
+--- Nützlich, wenn arbeiter per script erstellt werden, ansonsten funktioniert es automatisch.
+---@param _player number
 function Logic.PlayerReAttachAllWorker(_player) end
 
 --- Setzt den Player auf Spiel verlassen.
+---@param _player number
 function Logic.PlayerSetGameStateToLeft(_player) end
 
 --- Setzt den Spieler auf verloren.
+---@param _player number
 function Logic.PlayerSetGameStateToLost(_player) end
 
 --- Setzt den Spieler auf spielend.
+---@param _player number
 function Logic.PlayerSetGameStateToPlaying(_player) end
 
 --- Setzt den Spieler auf gewonnen.
+---@param _player number
 function Logic.PlayerSetGameStateToWon(_player) end
 
 --- Setzt, ob der Spieler menschlich ist.
+---@param _player number
+---@param _flag number
 function Logic.PlayerSetIsHumanFlag(_player, _flag) end
 
 --- Setzt die Spielerfarbe für die Statistiken. (MP)
+---@param _player number
+---@param _r number (0-255)
+---@param _g number (0-255)
+---@param _b number (0-255)
 function Logic.PlayerSetPlayerColor(_player, _r, _g, _b) end
 
 --- Entfernt den Distanz-Check zwischen diesen Entities.
@@ -1307,9 +1429,14 @@ function Logic.RemoveEntityToEntityDistanceCheck(_id1, _id2) end
 function Logic.RemoveEntityToEntityDistanceCheckForMainID(_id1) end
 
 --- Entfernt die Quest komplett aus dem Auftragsbuch.
-function Logic.RemoveQuest(_player, _questId) end
+---@param _player number
+---@param _questId number
+---@param _info number|nil Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an (wenn _name ein sttKey ist, wird er im tooltip angezeigt) (default 0)
+function Logic.RemoveQuest(_player, _questId, _info) end
 
 --- Entfernt den Tribut aus dem Tributmenü.
+---@param _player number
+---@param _tribId number
 function Logic.RemoveTribute(_player, _tribId) end
 
 --- Hebt SuspendAllEntities auf.
@@ -1363,7 +1490,9 @@ function Logic.SetCurrentMaxNumWorkersInBuilding(_id, _maxWorker) end
 function Logic.SetCurrentPrice(_player, _rTyp, _pri) end
 
 --- Setzt den DiplomatieStatus zwischen diesen Playern.
--- _diplStat: Diplomacy.XXX
+---@param _player1 number
+---@param _player2 number
+---@param _diplSat number Diplomacy.XXX
 function Logic.SetDiplomacyState(_player1, _player2, _diplSat) end
 
 --- !!! democopy
@@ -1418,30 +1547,47 @@ function Logic.SetGlobalInvulnerability(_flag) end
 function Logic.SetModelAndAnimSet(_id,_modelset,_animset) end
 
 --- Setzt die Anzahl im HQ kaufbarer Helden. (MP)
+---@param _player number
+---@param _num number
 function Logic.SetNumberOfBuyableHerosForPlayer(_player, _num) end
 
 --- Setzt das NPC-Ausrufezeichen über diesem Entity.
 function Logic.SetOnScreenInformation(_id, _flag) end
 
 --- Setzt den Namen des Players (im Diplomatiemenü).
--- _name: StringTableText-Key
+---@param _player number
+---@param _name string StringTableText-Key
 function Logic.SetPlayerName(_player, _name) end
 
 --- Setzt, ob der Spieler seine Leader bezahlen muss.
+---@param _player number
+---@param _flag number
 function Logic.SetPlayerPaysLeaderFlag(_player, _flag) end
 
 --- Setzt den Namen des Players (im Diplomatiemenü).
--- _name: Name des Spielers (nil löscht aus Diplomatiemenü)
+---@param _player number
+---@param _name string Name des Spielers (nil löscht aus Diplomatiemenü)
 function Logic.SetPlayerRawName(_player, _name) end
 
---- funktionslos seit 1.6 ?
-function Logic.SetPlayerTaxAmountFactor() end
+---setzt einen faktor für sondersteuern (GUI.LevyTax).
+--- scheint keinen einfluss auf die verlorene motivation zu haben.
+---@param player number
+---@param factor number
+function Logic.SetPlayerTaxAmountFactor(player, factor) end
 
---- !!! democopy
--- Setzt die Questposition.
+--- Setzt die Questposition.
+---@param _player number
+---@param _questId number
+---@param _posX number
+---@param _posY number
+---@param _info number|nil Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an (wenn _name ein sttKey ist, wird er im tooltip angezeigt) (default 0)
 function Logic.SetQuestPosition(_player, _questId, _posX, _posY, _info) end
 
 --- Setzt den Questtyp: MAINQUEST/SUBQUEST.._..OPEN/CLOSED
+---@param _player number
+---@param _questId number
+---@param _qTyp number Der Quest-Typ, welcher das Symbol des Quests im Auftragsmenü verändert. Möglichkeiten: MAINQUEST_OPEN, MAINQUEST_CLOSED, SUBQUEST_OPEN, SUBQUEST_CLOSED
+---@param _info number|nil Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an (wenn _name ein sttKey ist, wird er im tooltip angezeigt) (default 0)
 function Logic.SetQuestType(_player, _questId, _qTyp, _info) end
 
 --- Setzt die Menge abbaubarer Rohstoffe des Schachts/Haufens.
@@ -1456,8 +1602,14 @@ function Logic.SetShareExplorationWithPlayerFlag(_player1, _player2, _flag) end
 --- Setzt den Geschwindigkeitsfaktor eines Entity (normal 1.0).
 function Logic.SetSpeedFactor(_id, _factor) end
 
---- ???
-function Logic.SetSubQuestDoneFlag() end
+--- Setzt die subquest flag. kann mit @customcolor:id im quest text getested werden.
+--- farbe: 0->weiß, 1->grau.
+---@param player number
+---@param questId number
+---@param subquestId number (0-19)
+---@param flag number
+---@param info number|nil Information "neue Quest" links unten Anzeugen 0 = aus; 1 = an (wenn _name ein sttKey ist, wird er im tooltip angezeigt) (default 0)
+function Logic.SetSubQuestDoneFlag(player, questId, subquestId, flag, info) end
 
 --- Setzt die TaskList.
 ---@param _id number
@@ -1532,6 +1684,11 @@ function Logic.StartSnow() end
 function Logic.StopPrecipitation() end
 
 --- Entfernt Rohstoffe eines Spielers.
+--- tut nichts, wenn nicht genug rohstoffe vorhanden.
+---@param _player number
+---@param _resTyp number
+---@param _amount number
+---@return number flag 1 wenn erfolgreich entfernt
 function Logic.SubFromPlayersGlobalResource(_player, _resTyp, _amount) end
 
 --- Macht alle Entities unbeweglich, unselektierbar und unangreifbar.
@@ -1579,8 +1736,8 @@ function Logic.WaterSetType(_minX, _minY, _maxX, _maxY, _watTyp) end
 -- return: x, y (normalerweise x==y)
 function Logic.WorldGetSize() end
 
---- !!! democopy
--- funktionslos
+--- funktionslos
+---@param _player number
 function Logic.WriteStatisticsToLogFile(_player) end
 
 return nil
