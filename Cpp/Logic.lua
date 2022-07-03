@@ -83,12 +83,12 @@ function Logic.AddTribute(_player, _tributeId, _ownerEntityId, _offeringPlayerId
 --- Ändert das Wetter.
 -- Periodische Wettereffekte werden einer nach dem anderen (einfügereihenfolge) in Endlosschleife ausgeführt,
 -- Nichtperiodische überschreiben dieses Normale Periodische Wetter für _duration
--- _state: Welches Wetter? (1=normal,2=Regen,3=Schnee)
--- _duration: Wie lange dieses Wetter sein soll (Sekunden)
--- _periodic: Soll es periodisch sein? (1=normal periodic,0=Wetterturm-Effekt)
--- _gfx: GFX-Set (normal: 1-3, wenn mehr GFX-Typen gesetzt sind, können diese auch verwendet werden)
--- _forerun: Der Übergang benötigt einen Vorlauf, dieser wird hier in Sekunden gesetzt
--- _transition: Dauer des Übergangs 
+---@param _state number Welches Wetter? (1=normal,2=Regen,3=Schnee)
+---@param _duration number Wie lange dieses Wetter sein soll (Sekunden)
+---@param _periodic number (1=normal periodic,0=Wetterturm-Effekt)
+---@param _gfxset number GFX-Set (normal: 1-3, wenn mehr GFX-Typen gesetzt sind, können diese auch verwendet werden)
+---@param _forerun number Der Übergang benötigt einen Vorlauf, dieser wird hier in Sekunden gesetzt
+---@param _transition number Dauer des Übergangs 
 function Logic.AddWeatherElement(_state,_duration,_periodic,_gfxset,_forerun,_transition) end
 
 --- Kann der Spieler (von der Motivation her) neue Entitys erhalten?
@@ -109,14 +109,18 @@ function Logic.BarracksBuyLeader(_barrackId, _upgradeCategory) end
 ---@param _slot number (1-4)
 function Logic.BuyMerchantOffer(_entityId, _playerId, _slot) end
 
---- !!! democopy
--- Kann ein Rohstoff gekauft werden?
--- return: 0/1
+--- Kann ein Rohstoff gekauft werden?
+--- wird meines wissens nach nirgendwo geprüft.
+---@return number flag
+---@param _player number
+---@param _resType number
 function Logic.CanBuyResource(_player, _resType) end
 
---- !!! democopy
--- Kann ein Rohstoff verkauft werden?
--- return: 0/1
+--- Kann ein Rohstoff verkauft werden?
+--- wird meines wissens nach nirgendwo geprüft.
+---@return number flag
+---@param _player number
+---@param _resType number
 function Logic.CanSellResource(_player, _resType) end
 
 --- Bricht den ausbau eines gebäudes ab.
@@ -154,11 +158,9 @@ function Logic.CheckBuildingPlacement() end
 ---@return number flag
 function Logic.CheckEntitiesDistance(_id1,_id2,_distance) end
 
---- !!! Map Editor Funktion; unbrauchbar
+--- !!! Map Editor Funktion; unbrauchbar??
 -- Prüft, ob alle Siedler nicht im blocking stehen.
 -- Wozu???
--- Rückgabe???
--- return: nil
 function Logic.CheckSettlerPlacement() end
 
 --- Platziert eine Baustelle.
@@ -202,7 +204,8 @@ function Logic.DEBUG_UpgradeBuilding(_id) end
 
 --- Wertet ein Entity auf. (z.B. PU_LeaderSword1 -> PU_LeaderSword2)
 -- TaskList und Bewegung werden übernommen.
--- id ändert sich 
+-- id ändert sich
+---@param _id number
 function Logic.DEBUG_UpgradeSettler(_id) end
 
 --- ??? Map Editor Funktion; unbrauchbar
@@ -226,27 +229,46 @@ function Logic.DestroyEntity(_entityId) end
 --- Entfernt einen Leader und seine Soldiers.
 function Logic.DestroyGroupByLeader(_leaderId) end
 
---- !!! democopy
--- Verhindert den Kauf von Rohstoffen.
+--- Verhindert den Kauf von Rohstoffen.
+---meines wissens nach nirgendwo geprüft.
+---@param _player number
+---@param _resType number
 function Logic.DisableCanBuyResource(_player, _resType) end
 
---- !!! democopy
--- Verhindert den Verkauf von Rohstoffen.
+--- Verhindert den Verkauf von Rohstoffen.
+---meines wissens nach nirgendwo geprüft.
+---@param _player number
+---@param _resType number
 function Logic.DisableCanSellResource(_player, _resType) end
 
---- scheint nicht zu funktionieren.
--- return: 1/0 Handel Erfolgreich
+--- führt einen sofortigen handel durch.
+--- ruft keine trigger/callbacks auf, aber ändert die preise.
+--- im gegensatz zu anderen handles-funktionen, prüft CanSellResource unf CanBuyResource flags des spielers.
+---@param _playerid number
+---@param _resTypeSell number
+---@param _resTypeBuy number
+---@param _amountBuy number
+---@return number flag handel erfolgreich
 function Logic.DoInstantTransaction(_playerid, _resTypeSell, _resTypeBuy, _amountBuy) end
 
---- Startet einen normalen Handel.
+--- Startet einen normalen Handel an einem marktplatz.
+--- keine prüfung, ob genug rohstoffe vorhanden sind.
+---@param _buildingID number
+---@param _sellResourceType number
+---@param _buyResourceType number
+---@param _buyResourceAmount number
 function Logic.DoTransaction(_buildingID, _sellResourceType, _buyResourceType, _buyResourceAmount) end
 
---- !!! democopy
--- Erlaubt den Kauf von Rohstoffen.
+--- Erlaubt den Kauf von Rohstoffen.
+---meines wissens nach nirgendwo geprüft.
+---@param _player number
+---@param _resType number
 function Logic.EnableCanBuyResource(_player, _resType) end
 
---- !!! democopy
--- Erlaubt den Verkauf von Rohstoffen.
+--- Erlaubt den Verkauf von Rohstoffen.
+---meines wissens nach nirgendwo geprüft.
+---@param _player number
+---@param _resType number
 function Logic.EnableCanSellResource(_player, _resType) end
 
 --- Spieler des Entities.
@@ -311,10 +333,13 @@ function Logic.FillBuildingUpgradeCostsTable(_entityType, _t) end
 function Logic.FillLeaderCostsTable(_playerId, _upgradeCategory, _t) end
 
 --- Füllt _t mit den Kosten für einen Serf.
+---@param _t CostInfo
 function Logic.FillSerfCostsTable(_t) end
 
---- ??? Einheitenupgrades über Technologien...
-function Logic.FillSettlerUpgradeCostsTable() end
+--- ungenutzt, füllt t mit den upgradekosten eines entities.
+---@param etyp number
+---@param t CostInfo
+function Logic.FillSettlerUpgradeCostsTable(etyp, t) end
 
 --- Füllt _t mit den Kosten für den Kauf eines Soldiers dieser Kategorie.
 -- (Immer die Kosten für den zum aktuell auszubildenden Leader)
@@ -329,6 +354,8 @@ function Logic.ForceFullExplorationUpdate() end
 
 --- Zwingt einen Arbeiter zum Arbeiten.
 --  Effekt auf Motivation!
+---selber mechanismus wie überstunden.
+---@param _id number
 function Logic.ForceWorkerToWork(_id) end
 
 --- Gibt die aktuelle Alarm-Aufladezeit zurück.
@@ -374,7 +401,9 @@ function Logic.GetAttachedResidentsToBuilding(_id) end
 ---@return number id1 ...
 function Logic.GetAttachedWorkersToBuilding(_id) end
 
---- Gibt die maximale Anzahl der Arbeiter für diesen Gebäudetyp zurück.
+--- Gibt die anzahl der VC plätze zurück, die ein siedler des typs benötigt.
+---@return number
+---@param _eTyp number
 function Logic.GetAttractionLimitValueByEntityType(_eTyp) end
 
 --- Gibt die durchschnittliche Motivation zurück.
@@ -383,13 +412,18 @@ function Logic.GetAttractionLimitValueByEntityType(_eTyp) end
 function Logic.GetAverageMotivation(_player) end
 
 --- Verworfen
+---@return number sec
 function Logic.GetBattleSerfMaxSeconds() end
 
 --- Verworfen
-function Logic.GetBattleSerfSecondsLeft() end
+---@param id number
+---@return number sec
+function Logic.GetBattleSerfSecondsLeft(id) end
 
 --- Gibt die Segnungskosten für diese Segnung zurück.
 -- immer gleich, da jede Segnung genau 5000 Glauben (ResourceType.Faith) benötigt
+---@return number cost
+---@param _blessCat number
 function Logic.GetBlessCostByBlessCategory(_blessCat) end
 
 --- Gibt die segnungskosten zurück.
@@ -479,10 +513,16 @@ function Logic.GetCannonProgress(_id) end
 
 --- Gibt den Deflationswert des Rohstoffes zurück.
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
+---@param _player number
+---@param _rTyp number
+---@return number def (0 bei fehler)
 function Logic.GetCurrentDeflation(_player, _rTyp) end
 
 --- Gibt den Inflationswert des Rohstoffes zurück.
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
+---@param _player number
+---@param _rTyp number
+---@return number inf (0 bei fehler)
 function Logic.GetCurrentInflation(_player, _rTyp) end
 
 --- Gibt das aktuelle Arbeitermaximum dieses Gebäudes zurück (dynamisch, nicht vom entitytyp).
@@ -492,9 +532,15 @@ function Logic.GetCurrentMaxNumWorkersInBuilding(_id) end
 
 --- Gibt den Preis des Rohstoffes zurück.
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
+---@param _player number
+---@param _rTyp number
+---@return number price (0 bei fehler)
 function Logic.GetCurrentPrice(_player, _rTyp) end
 
 --- Gibt die aktuelle TaskList der Entity zurück.
+--- funktioniert nur bei settlern
+---@return string|nil tlname
+---@param _id number
 function Logic.GetCurrentTaskList(_id) end
 
 --- Gibt die Spielzeit der Map zurück (in Ticks => 1/10 sec)
@@ -512,6 +558,7 @@ function Logic.GetDefendersSlotsAvailable(_id) end
 function Logic.GetDiplomacyState(_player1, _player2) end
 
 --- Gibt die benötigte Wetterturm-Energie für einen Wetterwechsel zurück.
+---@return number sec
 function Logic.GetEnergyRequiredForWeatherChange() end
 
 --- Gibt Entities des Typs zurück.
@@ -533,6 +580,8 @@ function Logic.GetEntities(_type,_max) end
 function Logic.GetEntitiesInArea(_entityType, _posX, _posY, _range, _amount) end
 
 --- Gibt den Rüstungswert des Entities zurück.
+---@param _entityId number
+---@return number|nil
 function Logic.GetEntityArmor(_entityId) end
 
 --- Gibt das Entity (genau ?) an dieser Position zurück.
@@ -542,6 +591,8 @@ function Logic.GetEntityArmor(_entityId) end
 function Logic.GetEntityAtPosition(_posX, _posY) end
 
 --- Gibt den Schaden des Entities zurück.
+---@param _entityId number
+---@return number|nil
 function Logic.GetEntityDamage(_entityId) end
 
 --- Gibt die Sichtweite des Entities zurück.
@@ -610,6 +661,8 @@ function Logic.GetFoundationTop(_towerId) end
 function Logic.GetGlobalInvulnerability() end
 
 --- Füllt _t mit den Ids der Helden dieses Players.
+---@param _player number
+---@param _t number
 function Logic.GetHeroes(_player, _t) end
 
 --- Gibt die Erfahrungslevel (Sterne) des Leaders zurück.
@@ -619,7 +672,9 @@ function Logic.GetLeaderExperienceLevel(_id) end
 --- Gibt einen Leader zurück, der an diesen Gebäude trainiert.
 function Logic.GetLeaderTrainingAtBuilding(_buildingId) end
 
---- Gibt die maximale Soldatenzahl dieses Leaders zurück.
+--- Gibt die VC plätze zurück die der leader mit seinen soldiers belegt.
+---@return number
+---@param _id number
 function Logic.GetLeadersGroupAttractionLimitValue(_id) end
 
 --- Gibt die Motivation zurück, ab der ein Siedler verärgert ist.
@@ -665,7 +720,9 @@ function Logic.GetMaxNumberOfEaters(id) end
 function Logic.GetMaxNumberOfResidents(id) end
 
 --- Gibt den maximalen Glaubenswert des Spielers zurück.
-function Logic.GetMaximumFaith(_player) end
+--- wird mit player als parameter benutzt, der wird aber intern nicht verwendet.
+---@return number max
+function Logic.GetMaximumFaith() end
 
 --- Gibt die maximale möglichen Spieler zurück.
 --- immer 8.
@@ -694,17 +751,26 @@ function Logic.GetMotivationEffect(_Id) end
 function Logic.GetNextEntityOfPlayerOfType(_id) end
 
 --- ???
-function Logic.GetNextEntityOfPlayerOfTypeAtBuilding() end
+---@return number id
+---@param id number
+---@param ty number
+function Logic.GetNextEntityOfPlayerOfTypeAtBuilding(id, ty) end
 
 --- Gibt den nächsten unbeschäftigten Serf zurück.
+---@param _player number
+---@param _serf number
+---@return number id
 function Logic.GetNextIdleSerf(_player, _serf) end
 
 --- Gibt den nächsten Leader zurück.
 -- (Typabhängig??? Verwendet für shortcut)
+---@param _player number
+---@param _leader number
+---@return number
 function Logic.GetNextLeader(_player, _leader) end
 
 --- Gibt den nächsten Wetterstatus zurück.
--- return: 1/2/3 -> Sommer/Regen/Winter
+---@return number ws 1/2/3 -> Sommer/Regen/Winter
 function Logic.GetNextWeatherState() end
 
 --- Gibt den nächsten Arbeiter ohne Essensplatz zurück.
@@ -750,6 +816,8 @@ function Logic.GetNumberOfEntitiesOfType(_eTyp) end
 function Logic.GetNumberOfEntitiesOfTypeOfPlayer(_player, _eTyp) end
 
 --- Gibt die Anzahl der unbeschäftigten Serfs eines players zurück.
+---@param _player number
+---@return number
 function Logic.GetNumberOfIdleSerfs(_player) end
 
 --- Gibt die Anzahl der Leader eines players zurück.
@@ -764,6 +832,8 @@ function Logic.GetNumberOfLeader(_player) end
 function Logic.GetNumberOfPlayersWorkerOfType(_player, _eTyp) end
 
 --- Gibt die Anzahl der Siedler dieses Spielers zurück.
+---@param _player number (kann 0 sein für alle spieler)
+---@return number
 function Logic.GetNumberOfSettlers(_player) end
 
 --- Gibt die Anzahl der Arbeiter ohne Essensplatz zurück.
@@ -923,6 +993,11 @@ function Logic.GetResourceDoodadGoodType(_id) end
 function Logic.GetSector(_entityId) end
 
 --- Berechnet die Kosten für den Handel.
+---@param _player number
+---@param _selltype number
+---@param _buyType number
+---@param _buyAmount number
+---@return number sellAmount
 function Logic.GetSellAmount(_player, _selltype, _buyType, _buyAmount) end
 
 --- Gibt den aktuellen Leadertyp des Players zurück.
@@ -932,23 +1007,34 @@ function Logic.GetSellAmount(_player, _selltype, _buyType, _buyAmount) end
 function Logic.GetSettlerTypeByUpgradeCategory(_upCat, _player) end
 
 --- Gibt die Siedlertypen in dieser Upgradecategory zurück.
--- return: number, typ1, typ2, ...
+---@param _upcat number
+---@return number amount
+---@return number id1 ...
 function Logic.GetSettlerTypesInUpgradeCategory(_upcat) end
 
 --- Gibt zurück, vie viel Platz das Entity im VC belegt.
+---@return number
+---@param _id number
 function Logic.GetSettlersAttractionLimitValue(_id) end
 
 --- Gibt das Gebäude mit dem Essensplatz des Arbeiters zurück.
+---@param _id number
+---@return number id (oder 0)
 function Logic.GetSettlersFarm(_id) end
 
 --- Gibt die Motivation des Siedlers zurück.
--- return: Wert zwischen 0.0 und 3.0
+---@return number moti Wert zwischen 0.0 und 3.0 (0 bei fehler)
+---@param _id number
 function Logic.GetSettlersMotivation(_id) end
 
 --- Gibt das Gebäude mit dem Schlafplatz des Arbeiters zurück.
+---@param _id number
+---@return number id (oder 0)
 function Logic.GetSettlersResidence(_id) end
 
 --- Gibt das Arbeitsgebäude des Arbeiters zurück.
+---@param _id number
+---@return number id (oder 0)
 function Logic.GetSettlersWorkBuilding(_id) end
 
 --- Gibt alle Soldiers des Leaders zurück.
@@ -1002,6 +1088,7 @@ function Logic.GetTime() end
 function Logic.GetTimeMs() end
 
 --- Gibt die Zeit bis zum nächsten Wetterwechsel zurück (in Sekunden).
+---@return number sec
 function Logic.GetTimeToNextWeatherPeriod() end
 
 --- Gibt die Zeit zurück, die ein Gebäude für den Ausbau benötigt.
@@ -1010,7 +1097,8 @@ function Logic.GetTimeToNextWeatherPeriod() end
 function Logic.GetTotalUpgradeTimeForBuilding(_id) end
 
 --- Gibt den Handelsfortschritt zurück.
--- return: 0-100 (100 -> gerade kein Handel)
+---@return number perc 0-100 (100 -> gerade kein Handel) (0 bei fehler)
+---@param _id number
 function Logic.GetTransactionProgress(_id) end
 
 --- Gibt die Tributkosten zurück.
@@ -1047,7 +1135,7 @@ function Logic.GetUpgradeCategoryByBuildingType(_eTyp) end
 function Logic.GetUpgradeLevelForBuilding(_id) end
 
 --- Gibt den Aktuellen Wetterstatus zurück.
--- return: 1/2/3 -> Sommer/Regen/Winter
+---@return number ws 1/2/3 -> Sommer/Regen/Winter
 function Logic.GetWeatherState() end
 
 --- Gibt den Arbeitertyp eines Gebäudes zurück.
@@ -1095,35 +1183,58 @@ function Logic.GroupStand(_id) end
 function Logic.HealEntity(_entityId, _heal) end
 
 --- Verworfen
-function Logic.HeroChangeActionPoints() end
+---==Logic.HeroSetActionPoints
+---@param id number
+---@param ap number
+function Logic.HeroChangeActionPoints(id, ap) end
 
 --- Gibt die maximale Auflafezeit der Fähigkeit zurück.
+---@param _id number
+---@param _ability number
+---@return number sec
 function Logic.HeroGetAbilityRechargeTime(_id, _ability) end
 
 --- Gibt die aktuelle Aufladezeit der Fähigkeit zurück.
 -- Bei Logic.HeroGetAbilityRechargeTime ist die Fähigkeit komplett aufgeladen.
+---@param _id number
+---@param _ability number
+---@return number sec
 function Logic.HeroGetAbiltityChargeSeconds(_id, _ability) end
 
 --- Verworfen
-function Logic.HeroGetActionPointCostForAbility() end
+---@param id number
+---@return number ap
+function Logic.HeroGetActionPointCostForAbility(id) end
 
 --- Verworfen
-function Logic.HeroGetActionPoints() end
+---@param id number
+---@return number ap
+function Logic.HeroGetActionPoints(id) end
 
 --- Verworfen
-function Logic.HeroGetMaxActionPoints() end
+---@param id number
+---@return number ap
+function Logic.HeroGetMaxActionPoints(id) end
 
 --- Gibt zurück, ob der Held die Fähigkeit besitzt.
--- return: 1/0
+---@param _id number
+---@param _ability number
+---@return number flag
 function Logic.HeroIsAbilitySupported(_id, _ability) end
 
 
 --- setzt die aktuelle Aufladezeit der Heldenfähigkeit.
 -- Bei Logic.HeroGetAbilityRechargeTime ist die Fähigkeit komplett aufgeladen.
+---@param _id number
+---@param _ability number
+---@param _value number
 function Logic.HeroSetAbilityChargeSeconds(_id, _ability, _value) end
 
 --- Verworfen
-function Logic.HeroSetActionPoints() end
+---==Logic.HeroChangeActionPoints
+---@param id number
+---@param ap number
+function Logic.HeroSetActionPoints(id, ap) end
 
 --- Verletzt ein Entity. Es kann dabei sterben.
 -- Wird ein negativer Wert übergeben, wird das Entity geheilt.
@@ -1193,11 +1304,13 @@ function Logic.IsEntityMoving(_entityId) end
 function Logic.IsEntityTypeInCategory(_etyp, _eCat) end
 
 --- Gibt zurück, ob das Entity ein Held ist.
--- return: 1/0
+---@param _entityId number
+---@return number flag
 function Logic.IsHero(_entityId) end
 
 --- Gibt zurück, ob das Entity ein Leader ist.
--- return: 1/0
+---@param _entityId number
+---@return number flag
 function Logic.IsLeader(_entityId) end
 
 --- Gibt zurück, ob die Position sichtbar ist.
@@ -1251,23 +1364,28 @@ function Logic.IsPlayerEntityInArea(_player, _posX, _posY, _range, _cat) end
 function Logic.IsPlayerEntityOfCategoryInArea(_player, _posX, _posY, _range, _catName1, _catName2, ...) end
 
 --- Gibt zurück, ob das Entity ein Serf ist.
--- return: 1/0
+---@param _entityId number
+---@return number flag
 function Logic.IsSerf(_entityId) end
 
---- Gibt zurück, ob das Entity ein Siedler (Arbeiter?) ist. ??
--- return: 1/0
+--- Gibt zurück, ob das Entity ein Siedler (Arbeiter/Militär) ist.
+---@param _entityId number
+---@return number flag
 function Logic.IsSettler(_entityId) end
 
---- Gibt zurück, ob das Entity in einer Farm (Taverne?) ist.
--- return: 1/0
+--- Gibt zurück, ob das Entity in einer Farm/Taverne ist.
+---@param _id number
+---@return number flag
 function Logic.IsSettlerAtFarm(_id) end
 
 --- Gibt zurück, ob das Entity in einem Wohnhaus ist.
--- return: 1/0
+---@param _id number
+---@return number flag
 function Logic.IsSettlerAtResidence(_id) end
 
 --- Gibt zurück, ob das Entity in einer Arbeitsstätte ist.
--- return: 1/0
+---@param _id number
+---@return number flag
 function Logic.IsSettlerAtWork(_id) end
 
 --- Gibt zurück, ob das Gebäude ein Technologiehändler ist.
@@ -1280,11 +1398,12 @@ function Logic.IsTechTraderBuilding(_id) end
 function Logic.IsTechnologyResearched(_player, _techtTyp) end
 
 --- Gibt zurück, ob sich das Wetter gerade ändert.
--- return: 1/0
+---@return number flag
 function Logic.IsWeatherChangeActive() end
 
 --- Gibt zurück, ob das Entity ein Arbeiter ist.
--- return 1/0
+---@param _id number
+---@return number flag
 function Logic.IsWorker(_id) end
 
 --- Ändert die Formation der Soldiers
@@ -1363,6 +1482,9 @@ function Logic.Lightning(_positionX, _positionY) end
 function Logic.MoveEntity(_entityId, _posX, _posY) end
 
 --- Gibt einen Bewegungsbefehl.
+---@param _id number
+---@param _posX number
+---@param _posY number
 function Logic.MoveSettler(_id, _posX, _posY) end
 
 --- Gibt den Status des Spielers zurück.
@@ -1452,7 +1574,9 @@ function Logic.ResumeEntity(_id) end
 function Logic.RotateEntity(_id, _orientation) end
 
 --- Gibt zurück, ob in Darios Falkenreichweite Gegner sind. (Für Dario-Button-Blinken)
--- (Funktioniert mit anderen Entities?)
+-- (Funktioniert nur mit dario)
+---@return number flag
+---@param _id number
 function Logic.SentinelGetUrgency(_id) end
 
 --- Setzt das Territoriumszentrum, indem sich ein Tier bewegt
@@ -1469,10 +1593,16 @@ function Logic.SetBuildingSubAnim(_id, _index, _animation) end
 
 --- Setzt den Deflationswert des Rohstoffes.
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
+---@param _player number
+---@param _rTyp number
+---@param _def number
 function Logic.SetCurrentDeflation(_player, _rTyp, _def) end
 
 --- Setzt den Inflationswert des Rohstoffes.
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
+---@param _player number
+---@param _rTyp number
+---@param _inf number
 function Logic.SetCurrentInflation(_player, _rTyp, _inf) end
 
 --- Setzt die maximalen Arbeiter des Gebäudes.
@@ -1487,6 +1617,9 @@ function Logic.SetCurrentMaxNumWorkersInBuilding(_id, _maxWorker) end
 
 --- Setzt den Preis des Rohstoffes.
 -- http://www.siedler-maps.de/forum/Siedler-DEdK-Script-Forum/DeflationInflation-19435.htm
+---@param _player number
+---@param _rTyp number
+---@param _pri number
 function Logic.SetCurrentPrice(_player, _rTyp, _pri) end
 
 --- Setzt den DiplomatieStatus zwischen diesen Playern.
@@ -1495,8 +1628,10 @@ function Logic.SetCurrentPrice(_player, _rTyp, _pri) end
 ---@param _diplSat number Diplomacy.XXX
 function Logic.SetDiplomacyState(_player1, _player2, _diplSat) end
 
---- !!! democopy
--- Setzt die Länge des Wetterwechsels für einen Player???
+--- Setzt die Länge des Wetterwechsels für einen Player???
+---wetterturm?
+---@param _player number
+---@param _dur number
 function Logic.SetDurationOfWeatherChange(_player, _dur) end
 
 --- Setzt, ob das Entity sein Standardverhalten verwendet.
@@ -1543,7 +1678,11 @@ function Logic.SetEntityUserControlFlag(_id, _flag) end
 function Logic.SetGlobalInvulnerability(_flag) end
 
 --- Setzt Modell und Animation die genutzt werden. 
--- (Einheiten Models werden falsch angezeigt, die Animation kann nicht gesetzt werden!)
+-- (Settler Models werden falsch angezeigt, die Animation kann nicht gesetzt werden!)
+---die meisten animationen sind nicht im animset, und können nicht extra gesetzt werden.
+---@param _id number
+---@param _modelset number
+---@param _animset number
 function Logic.SetModelAndAnimSet(_id,_modelset,_animset) end
 
 --- Setzt die Anzahl im HQ kaufbarer Helden. (MP)
@@ -1552,6 +1691,8 @@ function Logic.SetModelAndAnimSet(_id,_modelset,_animset) end
 function Logic.SetNumberOfBuyableHerosForPlayer(_player, _num) end
 
 --- Setzt das NPC-Ausrufezeichen über diesem Entity.
+---@param _id number
+---@param _flag number
 function Logic.SetOnScreenInformation(_id, _flag) end
 
 --- Setzt den Namen des Players (im Diplomatiemenü).
@@ -1600,6 +1741,8 @@ function Logic.SetResourceDoodadGoodAmount(_id, _amount) end
 function Logic.SetShareExplorationWithPlayerFlag(_player1, _player2, _flag) end
 
 --- Setzt den Geschwindigkeitsfaktor eines Entity (normal 1.0).
+---@param _id number
+---@param _factor number
 function Logic.SetSpeedFactor(_id, _factor) end
 
 --- Setzt die subquest flag. kann mit @customcolor:id im quest text getested werden.
@@ -1637,24 +1780,25 @@ function Logic.SetTerrainNodeType(_posX, _posY, _terTyp) end
 -- round(pos/100)
 function Logic.SetTerrainVertexColor(_posX, _posY, _r, _g, _b) end
 
---- !!! democopy
--- Setzt beim Mapstart, wieviel Sekunden bereits vom ersten Wetterelement abgelaufen sind. 
--- (Bsp: 	Logic.AddWeatherElement(1, 700, ...) Logic.AddWeatherElement(2,...) Logic.SetWeatherOffset(600) ändert bereits nach 100 sek. das Wetter
-	
+--- Setzt beim Mapstart, wieviel Sekunden bereits vom ersten Wetterelement abgelaufen sind. 
+--- (Bsp: 	Logic.AddWeatherElement(1, 700, ...) Logic.AddWeatherElement(2,...) Logic.SetWeatherOffset(600) ändert bereits nach 100 sek. das Wetter)
+---@param _sec number
 function Logic.SetWeatherOffset(_sec) end
 
---- !!! democopy
--- Produktionsgeschwindigkeit???
--- Funktioniert noch?????
+--- Funktionslos
+--- (lua API existiert, aber das entity event ist leer).
 function Logic.SetWorkTaskListsPerCycle(_player, _entitytype, _num) end
 
 --- ???
 function Logic.SettlerAggressive(_id) end
 
---- ???
+--- leader stop befehl (bewegt sich weiter um gegner in reichweite anzugreifen).
+---@param _id number
 function Logic.SettlerDefend(_id) end
 
---- ???
+--- leader position halten Befehl.
+--- memoryleak?
+---@param _id number
 function Logic.SettlerStand(_id) end
 
 --- Funktionslos
@@ -1711,13 +1855,13 @@ function Logic.UpdateBlocking(_minX, _minY, _maxX, _maxY) end
 ---@param _player number
 function Logic.UpgradeBuildingCategory(_upCat, _player) end
 
---- !!! democopy
--- Wertet einen Siedler auf?
-function Logic.UpgradeSettler(_id) end
+--- ???
+function Logic.UpgradeSettler(ucat, player) end
 
---- !!! democopy
--- Wertet alle Entities der UpgradeCategory auf.
--- Technologieersatz?
+--- Wertet alle Entities der UpgradeCategory auf.
+-- ohne syncronisierung.
+---@param _upCat number
+---@param _player number
 function Logic.UpgradeSettlerCategory(_upCat, _player) end
 
 --- Setzt die Wasserhöhe.
