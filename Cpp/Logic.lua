@@ -1,5 +1,6 @@
 --- Funktionen um das Spiel grundlegend zu manipulieren.
--- C
+--- soweit nicht anders notiert, ist keine funktion hier syncronisiert. Fuktionen die den spielstatus ändern, müssen aus einem syncronen kontext aufgerufen werden.
+--- C
 Logic = {}
 
 --- Mapeditor Funktion; funktionslos
