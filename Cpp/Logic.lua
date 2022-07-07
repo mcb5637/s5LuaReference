@@ -130,6 +130,8 @@ function Logic.CancelBuildingUpgrade(_buildingId) end
 
 --- Übergibt alle Entities von _oldPlayer an _newPlayer.
 -- Probleme mit Ballista/Kanonentürmen und Leadern mit Soldiern!
+---@param _oldPlayer number
+---@param _newPlayer number
 function Logic.ChangeAllEntitiesPlayerID(_oldPlayer, _newPlayer) end
 
 --- Übergibt ein Entity an einen anderen Spieler.
@@ -140,11 +142,12 @@ function Logic.ChangeAllEntitiesPlayerID(_oldPlayer, _newPlayer) end
 ---@param _player number
 function Logic.ChangeEntityPlayerID(_id, _player) end
 
---- !!! democopy
--- Übergibt ein Entity an einen anderen Spieler.
--- Probleme mit Leadern mit Soldiern!
--- Ändert die EntityId!
--- return: neue Id
+--- Übergibt ein Entity an einen anderen Spieler.
+--- Probleme mit Leadern mit Soldiern!
+--- Ändert die EntityId!
+---@param _id number
+---@param _player number
+---@return number newId (kann 0 sein, insbesondere bei leadern)
 function Logic.ChangeSettlerPlayerID(_id, _player) end
 
 --- iterirert über gebäude und macht ???
@@ -174,8 +177,13 @@ function Logic.CheckSettlerPlacement() end
 function Logic.CreateConstructionSite(_posX, _posY, _rotation, _entityType, _playerId) end
 
 --- Erstellt einen Grafikeffekt.
--- _effectType: GGL_Effects.XXX  (einige führen zu Abstürzen!)
--- return: effectId
+--- funktioniert nicht mit flying effects (arrow/cannonball).
+--- fire effects crashen beim speichern/laden.
+---@return number id
+---@param _effectType number GGL_Effects.XXX  (einige führen zu Abstürzen!)
+---@param _posX number
+---@param _posY number
+---@param _playerId number
 function Logic.CreateEffect(_effectType, _posX, _posY, _playerId) end
 
 --- Erstellt ein Entity.
@@ -220,6 +228,7 @@ function Logic.DeactivateParticleEffect(_id, _effIndex) end
 function Logic.DebugDumpSettlersToAttract() end
 
 --- Beendet einen Grafikeffekt sofort.
+---@param _effectId number
 function Logic.DestroyEffect(_effectId) end
 
 --- Entfernt ein Entity aus dem Spiel. (nicht tötet)
@@ -227,6 +236,7 @@ function Logic.DestroyEffect(_effectId) end
 function Logic.DestroyEntity(_entityId) end
 
 --- Entfernt einen Leader und seine Soldiers.
+---@param _leaderId  number
 function Logic.DestroyGroupByLeader(_leaderId) end
 
 --- Verhindert den Kauf von Rohstoffen.
@@ -277,6 +287,10 @@ function Logic.EnableCanSellResource(_player, _resType) end
 function Logic.EntityGetPlayer(_id) end
 
 --- return x, y, z Position des Entities.
+---@param _id number
+---@return number x (0 bei fehler)
+---@return number y (0 bei fehler)
+---@return number z (0 bei fehler)
 function Logic.EntityGetPos(_id) end
 
 --- Dreht _id so, dass es _target ansieht.
@@ -285,37 +299,55 @@ function Logic.EntityGetPos(_id) end
 ---@param _target number|string
 function Logic.EntityLookAt(_id, _target) end
 
---- !!! democopy
--- Ersetzt alle vorkommen im Gebiet von _oldTerrain (0 -> alle) durch _newTerrain.
--- round(pos/100)
+
+--- Ersetzt alle vorkommen im Gebiet von _oldTerrain (0 -> alle) durch _newTerrain.
+--- (auflösung p/100/4, input p/100)
+---@param _minX number round(pos1.X/100)
+---@param _minY number round(pos1.Y/100)
+---@param _maxX number round(pos2.X/100)
+---@param _maxY number round(pos2.Y/100)
+---@param _oldTerrain number zu ersetzen (0->alle)
+---@param _newTerrain number ersetzen zu
 function Logic.ExchangeTerrainType(_minX, _minY, _maxX, _maxY, _oldTerrain, _newTerrain) end
 
---- !!! democopy
---  Ersetzt alle vorkommen im Gebiet von _oldWater (0 -> alle) durch _newWater.
---  round(pos/100)
+---  Ersetzt alle vorkommen im Gebiet von _oldWater (0 -> alle) durch _newWater.
+--- (auflösung p/100/4, input p/100)
+---@param _minX number round(pos1.X/100)
+---@param _minY number round(pos1.Y/100)
+---@param _maxX number round(pos2.X/100)
+---@param _maxY number round(pos2.Y/100)
+---@param _oldWater number zu ersetzen (0->alle)
+---@param _newWater number ersetzen zu
 function Logic.ExchangeWaterType(_minX, _minY, _maxX, _maxY, _oldWater, _newWater) end
 
 --- Gibt die Zeit in Millisekunden zurück, bei der zum ersten Mal ein bestimmter Siedler Typ aus dem Dorfzentrum eines Spielers
 --  gekommen ist; wenn noch kein Siedler des Typs existiert, dann wird 0 zurückgegeben.
+---@param _player number
+---@param _entityType number
+---@return number ms
 function Logic.FeedbackGetEntityTypeArrivalGameTimeMS(_player, _entityType) end
 
 --- Gibt die Zeit in Millisekunden zurück, bei der zum letzten Mal eine Feedback Meldung über eine Siedler Beschwerde kam und den betreffenden Siedler Typ
---  _playerID
---  _feedbackState ( was ist der Zustand des Siedlers?  siehe Feedback Table Bsp. Feedback.SettlerStateSad)
---  _feedbackReason (warum gab es die Beschwerde? siehe Feedback Table Bsp. Feedback.SettlerReasonTooMuchWork)
---  return: zeitInMS, entityType
+---@param _player number
+---@param _feedbackState number was ist der Zustand des Siedlers?  siehe Feedback Table Bsp. Feedback.SettlerStateSad
+---@param _feedbackReason number warum gab es die Beschwerde? siehe Feedback Table Bsp. Feedback.SettlerReasonTooMuchWork
+---@return number ms
+---@return number ety
 function Logic.FeedbackGetLastGrievanceGameTimeMS(_player, _feedbackState, _feedbackReason) end
 
---- Gibt die Zeit in Millisekunden zurück, bei der zum letzten Mal eine Feedback Message kam und falls vorhanden die auslösende EntityID 
---  _playerID
---  _feedbackMessage (siehe Feedback Table Bsp. Feedback.MessageAttack)
---  return: zeitInMS, entityID (oder 0 wenn das Ereignis nicht an eine Entity gebunden war)
+--- Gibt die Zeit in Millisekunden zurück, bei der zum letzten Mal eine Feedback Message kam und falls vorhanden die auslösende EntityID.
+---@param _player number
+---@param _feedbackMsg number siehe Feedback Table Bsp. Feedback.MessageAttack
+---@return number ms
+---@return number id (kann 0 sein)
 function Logic.FeedbackGetLastMessageGameTimeMS(_player, _feedbackMsg) end
 
 --- Gibt die Zeit in Millisekunden zurück, bei der zum letzten Mal die Feedback Meldung, dass ein Rohstoff zur Neige geht, kam.
--- _playerID
--- ResourcenTyp (siehe ResourceType table)
--- return: zeitInMS,positionX (des Rohstoffschachtes) , positionY
+---@param _player number
+---@param _resourceType number
+---@return number ms
+---@return number posX
+---@return number posY
 function Logic.FeedbackGetLastRunningOutOfResourceMessageGameTimeMS(_player, _resourceType) end
 
 --- Füllt _t mit den Kosten für den Bau dieses Gebäudes.
@@ -330,6 +362,10 @@ function Logic.FillBuildingCostsTable(_entityType, _t) end
 function Logic.FillBuildingUpgradeCostsTable(_entityType, _t) end
 
 --- Füllt _t mit den Kosten für den aktuellen Hauptmann der UpgradeCategorie.
+--- == Logic.FillSoldierCostsTable
+---@param _playerId number
+---@param _upgradeCategory number
+---@param _t CostInfo
 function Logic.FillLeaderCostsTable(_playerId, _upgradeCategory, _t) end
 
 --- Füllt _t mit den Kosten für einen Serf.
@@ -342,10 +378,16 @@ function Logic.FillSerfCostsTable(_t) end
 function Logic.FillSettlerUpgradeCostsTable(etyp, t) end
 
 --- Füllt _t mit den Kosten für den Kauf eines Soldiers dieser Kategorie.
--- (Immer die Kosten für den zum aktuell auszubildenden Leader)
+--- (Immer die Kosten für den zum aktuell auszubildenden Leader)
+--- == Logic.FillLeaderCostsTable
+---@param _player number
+---@param _upCat number
+---@param _t CostInfo
 function Logic.FillSoldierCostsTable(_player, _upCat, _t) end
 
 --- Füllt _t mit den Kosten für das Erforschen der angegebenen Technologie.
+---@param _tech number
+---@param _t CostInfo
 function Logic.FillTechnologyCostsTable(_tech, _t) end
 
 --- Führt eine Aktualisierung des Sichtbereiches durch. (Nur aktueller Spieler?)
@@ -496,19 +538,29 @@ function Logic.GetBuildingWorkPlaceLimit(_id) end
 ---@return number am (0 bei fehler)
 function Logic.GetBuildingWorkPlaceUsage(_id) end
 
---- !!! democopy
--- Gibt Gebäude zurück, bei denen Spieler, UpgradeCategory und Ort passen.
--- return: id1, id2, ...
+--- Gibt Gebäude zurück, bei denen Spieler, UpgradeCategory und Ort passen.
+---@param _upCat number
+---@param _player number
+---@param _posX number
+---@param _posY number
+---@param _range number
+---@param _amount number
+---@return number id1 ...
 function Logic.GetBuildingsByUpgradeCategory(_upCat, _player, _posX, _posY, _range, _amount) end
 
 --- Gibt die maximale Tarnungsdauer für ein Entity an. (nur für Ari interessant, sonst 0)
+---@param _id number
+---@return number
 function Logic.GetCamouflageDuration(_id) end
 
 --- Gibt die noch übrige Tarnungsdauer zurück.
+---@param _id number
+---@return number
 function Logic.GetCamouflageTimeLeft(_id) end
 
 --- Gibt den Kanonenbaufortschritt zurück.
--- return: 0-100 (100 -> fertig/keine Kanone in Arbeit)
+---@return number perc 0-100 (100 -> fertig/keine Kanone in Arbeit)
+---@param _id number
 function Logic.GetCannonProgress(_id) end
 
 --- Gibt den Deflationswert des Rohstoffes zurück.
@@ -544,6 +596,7 @@ function Logic.GetCurrentPrice(_player, _rTyp) end
 function Logic.GetCurrentTaskList(_id) end
 
 --- Gibt die Spielzeit der Map zurück (in Ticks => 1/10 sec)
+---@return number ticks
 function Logic.GetCurrentTurn() end
 
 --- Gibt die noch verfügbaren Verteidiger (= Arbeiter) zurück, die hier noch Platz finden.
@@ -657,7 +710,7 @@ function Logic.GetFoundationTop(_towerId) end
 
 --- Sind alle Entities Unverwundbar? (Wenn ja, wird auch kein Events.LOGIC_EVENT_ENTITY_HURT_ENTITY getriggert)
 -- (Ist während eines briefings akitv)
--- return: 1/0
+---@return number flag
 function Logic.GetGlobalInvulnerability() end
 
 --- Füllt _t mit den Ids der Helden dieses Players.
@@ -666,10 +719,14 @@ function Logic.GetGlobalInvulnerability() end
 function Logic.GetHeroes(_player, _t) end
 
 --- Gibt die Erfahrungslevel (Sterne) des Leaders zurück.
--- return: Anzahl Sterne (-1 = keine; 0 = 1 Stern usw.)
+---@return number lvls Anzahl Sterne (-1 = keine; 0 = 1 Stern usw.)
+---@param _id number
 function Logic.GetLeaderExperienceLevel(_id) end
 
 --- Gibt einen Leader zurück, der an diesen Gebäude trainiert.
+--- könnte mit etwas pech auch gerade ein solider sein...
+---@return number id
+---@param _buildingId number
 function Logic.GetLeaderTrainingAtBuilding(_buildingId) end
 
 --- Gibt die VC plätze zurück die der leader mit seinen soldiers belegt.
@@ -738,6 +795,8 @@ function Logic.GetMaximumNumberOfPlayer() end
 function Logic.GetMercenaryOffer(_buildingId, _slot, _t) end
 
 --- Gibt das passende Söldnerzelt zum Söldnerverkäufer zurück.
+---@param _id number|string
+---@return number id
 function Logic.GetMerchantBuildingId(_id) end
 
 --- Gibt den Motivationseinfluss dieses Gebäudes zurück.
@@ -774,12 +833,21 @@ function Logic.GetNextLeader(_player, _leader) end
 function Logic.GetNextWeatherState() end
 
 --- Gibt den nächsten Arbeiter ohne Essensplatz zurück.
+---@param _player number
+---@param _worker number
+---@return number id
 function Logic.GetNextWorkerWithoutFarm(_player, _worker) end
 
 --- ??? Vermutung aufgrund ähnlicher Funktionen
+---@param _player number
+---@param _worker number
+---@return number id
 function Logic.GetNextWorkerWithoutFarmOrResidence(_player, _worker) end
 
 --- Gibt den nächsten Arbeiter ohne Schlafplatz zurück.
+---@param _player number
+---@param _worker number
+---@return number id
 function Logic.GetNextWorkerWithoutResidence(_player, _worker) end
 
 --- Gibt die aktuelle Anzahl der Siedler (VC-Platze relevant) dieses players zurück.
@@ -954,12 +1022,18 @@ function Logic.GetPlayerTaxIncome(_player) end
 function Logic.GetPlayersGlobalResource(_player, _resTyp) end
 
 --- Gibt eine pseudozufällige Zahl zwischen 0 und _max aus.
+---@param _max number
+---@return number
 function Logic.GetRandom(_max) end
 
 --- Gibt die maximale Zeit einer Aura dieses Entitys zurück.
+---@param _id number
+---@return number
 function Logic.GetRangedEffectDuration(_id) end
 
 --- Gibt zurück, wie lange die Aura des Entitys noch aktiv ist.
+---@param _id number
+---@return number
 function Logic.GetRangedEffectTimeLeft(_id) end
 
 --- Gibt zu einem Rohstofftyp den unveredelten Rohstofftyp zurück.
@@ -979,9 +1053,13 @@ function Logic.GetRemainingUpgradeTimeForBuilding(_id) end
 function Logic.GetResourceAmountBelowMine(_id) end
 
 --- Gibt zurück, wie viele Rohstoffe noch in einem Schacht/Haufen sind.
+---@return number am
+---@param _id number
 function Logic.GetResourceDoodadGoodAmount(_id) end
 
 --- Gibt zurück, was für Rohstoffe in einem Schacht/Haufen sind.
+---@param _id number
+---@return number rty
 function Logic.GetResourceDoodadGoodType(_id) end
 
 --- Gibt den Sektor zurück, in dem sich das Entity befindet.
@@ -1038,11 +1116,16 @@ function Logic.GetSettlersResidence(_id) end
 function Logic.GetSettlersWorkBuilding(_id) end
 
 --- Gibt alle Soldiers des Leaders zurück.
--- return: number, id1, id2, ...
+---@param _id number
+---@return number amount
+---@return number id1 ...
 function Logic.GetSoldiersAttachedToLeader(_id) end
 
 --- Gibt Typ und Menge der Rohstoffe zurück, die ein Dieb trägt.
 -- return: resTyp, amount
+---@return number resType (0 bei fehler)
+---@return number amount (0 bei fehler)
+---@param _id number
 function Logic.GetStolenResourceInfo(_id) end
 
 --- Gibt die Ssondersteuermenge eines Arbeiters zurück (GUI.LevyTax).
@@ -1064,7 +1147,9 @@ function Logic.GetTaxLevel(_player) end
 function Logic.GetTechOffer(_buildingId, _index, _t) end
 
 --- Gibt an, wie weit die Technoloie erforscht ist.
--- return 0-100
+---@param _player number
+---@param _techTyp number
+---@return number prog (0-100)
 function Logic.GetTechnologyProgress(_player, _techTyp) end
 
 --- Gibt zurück, welche Technologie hier gerade erforscht wird.
@@ -1073,18 +1158,17 @@ function Logic.GetTechnologyProgress(_player, _techTyp) end
 function Logic.GetTechnologyResearchedAtBuilding(_id) end
 
 --- Gibt den Technologiestatus zurück.
--- return: 	0->verboten
--- 			1->waiting?
--- 			2->erlaubt
--- 			3->wird erforscht
--- 			4->erforscht
--- 			5->benötigt vorher andere Technologien
+--- siehe s5CommunityLb/tabes/TechState.lua.
+---@param _player number
+---@param _techTyp number
 function Logic.GetTechnologyState(_player, _techTyp) end
 
 --- Gibt die Zeit seit der die Map gestartet wurde in Sekunden zurück.
+---@return number sec
 function Logic.GetTime() end
 
 --- Gibt die Zeit seit der die Map gestartet wurde in Millisekunden zurück.
+---@return number ms
 function Logic.GetTimeMs() end
 
 --- Gibt die Zeit bis zum nächsten Wetterwechsel zurück (in Sekunden).
@@ -1152,18 +1236,27 @@ function Logic.GetWorkerTypeByBuilding(_id) end
 function Logic.GroupAddPatrolPoint(_id, _positionX, _positionY) end
 
 --- Befiehlt _id (und seinen Soldiers) _target anzugreifen.
+---@param _id number
+---@param _target number
 function Logic.GroupAttack(_id, _target) end
 
 --- Befiehlt _id (und seinen Soldiern) sich zur angegebenen Position zu bewegen und unterwegs alles anzugreifen.
 -- ! Nach einem Kampf auf dem Weg dorthin bleiben die Entities teilweise einfach stehen.
 -- _rot: Rotation am Ziel ???, -1->Automatisch (Funktioniert mit _rot==nil)
+---@param _id number
+---@param _posX number
+---@param _posY number
+---@param _rot number
 function Logic.GroupAttackMove(_id, _posX, _posY, _rot) end
 
 --- _id bleibt stehen und verteidigt sich (Standardverhalten von Leadern).
+---@param _id number
 function Logic.GroupDefend(_id) end
 
 --- _id folgt und verteidigt _target
 -- ! Bleibt teilweise einfach stehen, insbesondere wenn _id schneller ist als _target
+---@param _id number
+---@param _target number
 function Logic.GroupGuard(_id, _target) end
 
 --- Beginnt eine Patroullie für eine Militäreinheit zwischen der Aktuellen und der Zielposition.  
@@ -1175,6 +1268,7 @@ function Logic.GroupPatrol(_id, _positionX, _positionY) end
 
 --- _id bleibt stehen und bewegt sich auch nicht, wenn es angegriffen wird.
 -- (AutoAttack-Range von Fernkämpfern erhöht)
+---@param _id number
 function Logic.GroupStand(_id) end
 
 --- Heilt ein Entity. LP-Maximum wird beachtet.
@@ -1394,7 +1488,9 @@ function Logic.IsSettlerAtWork(_id) end
 function Logic.IsTechTraderBuilding(_id) end
 
 --- Gibt zurück, ob eine Technologie erforscht ist.
--- return: 1/0
+---@param _player number
+---@param _techtTyp number
+---@return number flag
 function Logic.IsTechnologyResearched(_player, _techtTyp) end
 
 --- Gibt zurück, ob sich das Wetter gerade ändert.
@@ -1414,37 +1510,52 @@ function Logic.IsWorker(_id) end
 -- 				5-> Kreis
 -- 				6-> Pfeil vorne
 -- 				7-> Reihe vorne
+---@param _id number
+---@param _formation number
 function Logic.LeaderChangeFormationType(_id, _formation) end
 
 --- Gibt die Kaserne/Schießstand/Stall zurück, an dem der Leader gerade ausgibildet wird. (oder 0)
+--- (sollte auch das gebäude zurückgeben, aus dem ein soldier gerade nach rekrutierung rausläuft).
+---@return number id
+---@param _id number
 function Logic.LeaderGetBarrack(_id) end
 
 --- Gibt den aktuellen Befehl des Leaders zurück.
--- return: 0-8
 -- 	0-> Angriff
--- 	1-> CommandEnter?
--- 	2-> CommandAggressiveMode?
 -- 	3-> Verteidigen (normal stehen)
 -- 	4-> Patroullieren
 -- 	5-> Angriffsbewegung
 -- 	6-> Bewachen
 -- 	7-> Stehen bleiben
 -- 	8-> Bewegen
+--  10->Heldenfähigkeit
+---@param _id number (0-8)
+---@return number cmd
 function Logic.LeaderGetCurrentCommand(_id) end
 
 --- Gibt die maximale Anzahl an Soldiers für diesen Leader zurück.
+---@param _id number
+---@return number
 function Logic.LeaderGetMaxNumberOfSoldiers(_id) end
 
 --- Gibt das nächste passende Militärgebäude in Soldatenkaufreichweite zurück. (oder 0)
+---@return number id (kann 0 sein)
+---@param _id number
 function Logic.LeaderGetNearbyBarracks(_id) end
 
 --- Gibt die aktuelle Anzahl an Soldiern zurück.
+---@param _id number
+---@return number nsol
 function Logic.LeaderGetNumberOfSoldiers(_id) end
 
 --- Verbindet einen existierenden Soldier mit diesem Leader.
+---keine ahnung welcher soldier verknüpft wird, aber vermutlic der nächste.
+---@param _id number
 function Logic.LeaderGetOneSoldier(_id) end
 
 --- Gibt die UpgradeCategory der Soldiers dieses Leaders zurück.
+---@param _id number
+---@return number
 function Logic.LeaderGetSoldierUpgradeCategory(_id) end
 
 --- Gibt den EntityType der Soldiers dieses Leaders zurück.
@@ -1452,25 +1563,32 @@ function Logic.LeaderGetSoldierUpgradeCategory(_id) end
 ---@return number
 function Logic.LeaderGetSoldiersType(_id) end
 
---- ???
+---entitytype zu ucat, funktioniert auch bei nicht soldiern?
+---@return number
+---@param _player number
+---@param _SolETyp number
 function Logic.LeaderGetUpgradeCategoryFromSoldierType(_player, _SolETyp) end
 
---- Verworfen!! 
--- Gibt den Sold für diesen Leader zurück.
+--- Gibt den Sold für diesen Leader zurück.
+---@param _id number
+---@return number
 function Logic.LeaderGetUpkeepCost(_id) end
 
 --- Entlässt einen Soldier
--- _leaderId
+---@param _id number
 function Logic.LeaderReleaseOneSoldier(_id) end
 
---- !!! democopy
--- Gebiet bewachen?????
+--- Gebiet bewachen?????
+---@param _id number
+---@param _posX number
+---@param _posY number
+---@param _range number
 function Logic.LeaderSetTerritory(_id, _posX, _posY, _range) end
 
---- !!! democopy
--- Blitzeinschlag an Position; gleichbedeutend mit Lighning Effekt
--- _positionX
--- _positionY
+--- Blitzeinschlag an Position; gleichbedeutend mit Lighning Effekt?
+--- CreateEffect benutztn
+---@param _positionX number
+---@param _positionY number
 function Logic.Lightning(_positionX, _positionY) end
 
 --- Bewegt ein Entity zu einer Position. Die TaskList wird nicht geändert!
@@ -1675,6 +1793,7 @@ function Logic.SetEntitySelectableFlag(_entityId, _flag) end
 function Logic.SetEntityUserControlFlag(_id, _flag) end
 
 --- Setzt die Globale Unverwundbarkeit. Wenn an, wird kein Entity_Hurt_Entity-Trigger mehr aufgerufen.
+---@param _flag number
 function Logic.SetGlobalInvulnerability(_flag) end
 
 --- Setzt Modell und Animation die genutzt werden. 
@@ -1732,6 +1851,9 @@ function Logic.SetQuestPosition(_player, _questId, _posX, _posY, _info) end
 function Logic.SetQuestType(_player, _questId, _qTyp, _info) end
 
 --- Setzt die Menge abbaubarer Rohstoffe des Schachts/Haufens.
+---setzt aktuelles und maximum.
+---@param _id number
+---@param _amount number
 function Logic.SetResourceDoodadGoodAmount(_id, _amount) end
 
 --- Lässt _player1 sehen, was _player2 sieht. (an/aus schalten)
@@ -1760,24 +1882,31 @@ function Logic.SetSubQuestDoneFlag(player, questId, subquestId, flag, info) end
 function Logic.SetTaskList(_id, _tasklist) end
 
 --- Setzt den Technologiestatus.
--- _state: 0->verboten
--- 			1->waiting?
--- 			2->erlaubt
--- 			3->wird erforscht
--- 			4->erforscht
--- 			5->benötigt vorher andere Technologien
+--- siehe s5CommunityLib/tables/TechState.lua.
+---@param _player number
+---@param _tech number
+---@param _state number
 function Logic.SetTechnologyState(_player, _tech, _state) end
 
 --- Setzt die Terrainhöhe.
--- round(pos/100)
+---@param _posX number round(pos.X/100)
+---@param _posY number round(pos.Y/100)
+---@param _hei number
 function Logic.SetTerrainNodeHeight(_posX, _posY, _hei) end
 
 --- Setzt den Terraintyp.
--- round(pos/100)
+--- (auflösung p/100/4, input p/100)
+---@param _posX number round(pos.X/100)
+---@param _posY number round(pos.Y/100)
+---@param _terTyp number
 function Logic.SetTerrainNodeType(_posX, _posY, _terTyp) end
 
 --- Setzt die Terrain-Vertexfarbe.
--- round(pos/100)
+---@param _posX number round(pos.X/100)
+---@param _posY number round(pos.Y/100)
+---@param _r number (0-255)
+---@param _g number (0-255)
+---@param _b number (0-255)
 function Logic.SetTerrainVertexColor(_posX, _posY, _r, _g, _b) end
 
 --- Setzt beim Mapstart, wieviel Sekunden bereits vom ersten Wetterelement abgelaufen sind. 
@@ -1805,7 +1934,10 @@ function Logic.SettlerStand(_id) end
 function Logic.SetupGfxSet() end
 
 --- Funktionslos     SCV 69 verwenden
-function Logic.SoldierGetLeaderEntityID() end
+--- sieht anscheinend in nem attachment zum effect nach...
+---@param id number
+---@return number
+function Logic.SoldierGetLeaderEntityID(id) end
 
 --- Erzeugt einen Partikel Effekt für Siedler (Bsp: Kanonenrauch bei PV_Cannon)
 --- EGL::CParticleEffectAttachmentBehavior
@@ -1846,7 +1978,10 @@ function Logic.SuspendEntity(_id) end
 function Logic.ToggleDebugMode() end
 
 --- Aktualisiert das Blocking.
--- round(pos/100)
+---@param _minX number round(pos1.X/100)
+---@param _minY number round(pos1.Y/100)
+---@param _maxX number round(pos2.X/100)
+---@param _maxY number round(pos2.Y/100)
 function Logic.UpdateBlocking(_minX, _minY, _maxX, _maxY) end
 
 --- Wertet alle Gebäude der UpgradeCategory auf.
@@ -1865,23 +2000,36 @@ function Logic.UpgradeSettler(ucat, player) end
 function Logic.UpgradeSettlerCategory(_upCat, _player) end
 
 --- Setzt die Wasserhöhe.
--- round(pos/100)
+--- (auflösung p/100/4, input p/100)
+---@param _minX number round(pos1.X/100)
+---@param _minY number round(pos1.Y/100)
+---@param _maxX number round(pos2.X/100)
+---@param _maxY number round(pos2.Y/100)
+---@param _hei number (0-10000)
 function Logic.WaterSetAbsoluteHeight(_minX, _minY, _maxX, _maxY, _hei) end
 
 --- Ändert die Wasserhöhe um den angegebenen Betrag.
--- round(pos/100)
+--- (auflösung p/100/4, input p/100)
+---@param _minX number round(pos1.X/100)
+---@param _minY number round(pos1.Y/100)
+---@param _maxX number round(pos2.X/100)
+---@param _maxY number round(pos2.Y/100)
+---@param _hei number endhöhe (0-10000)
 function Logic.WaterSetRelativeHeight(_minX, _minY, _maxX, _maxY, _hei) end
 
 --- Setzt den Wassertyp.
--- round(pos/100)
+---@param _minX number round(pos1.X/100)
+---@param _minY number round(pos1.Y/100)
+---@param _maxX number round(pos2.X/100)
+---@param _maxY number round(pos2.Y/100)
+---@param _watTyp number (<=15)
 function Logic.WaterSetType(_minX, _minY, _maxX, _maxY, _watTyp) end
 
---- Gibt die Weltgröße zurück.
--- return: x, y (normalerweise x==y)
+--- Gibt die Weltgröße zurück. (normalerweise x==y)
+---@return number x
+---@return number y
 function Logic.WorldGetSize() end
 
 --- funktionslos
 ---@param _player number
 function Logic.WriteStatisticsToLogFile(_player) end
-
-return nil
