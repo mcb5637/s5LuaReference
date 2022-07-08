@@ -93,11 +93,17 @@ function AI.Entity_ConnectWithArmy(_id, _armyId) end
 
 --- Erstellt einen Trupp Soldaten.
 -- (Keine aktive KI benötigt)
--- _soldierType: nil,0->Automatisch ermitteln
--- _0,_1 0 ???
--- _experience: XXX_EXPERIENCE (0-3)
--- _minSoldiers: Anzahl an Soldaten, bei denen der Trupp nachschub kaufen geht ??
--- return: id des Leaders
+---@param _playerId number
+---@param _leaderType number
+---@param _soldierType number|nil nil,0->Automatisch ermitteln
+---@param _soldiers number
+---@param _posX number
+---@param _posY number
+---@param _0 number|nil
+---@param _1 number|nil
+---@param _experience number XXX_EXPERIENCE (0-3)
+---@param _minSoldiers number Anzahl an Soldaten, bei denen der Trupp nachschub kaufen geht ??
+---@return number id
 function AI.Entity_CreateFormation(_playerId, _leaderType, _soldierType, _soldiers, _posX, _posY, _0, _1, _experience, _minSoldiers) end
 
 --- !!! democopy
