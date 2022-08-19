@@ -175,6 +175,7 @@ function Logic.CheckSettlerPlacement() end
 ---@param _rotation number
 ---@param _entityType number
 ---@param _playerId number
+---@return number id id der constructionsite
 function Logic.CreateConstructionSite(_posX, _posY, _rotation, _entityType, _playerId) end
 
 --- Erstellt einen Grafikeffekt.
