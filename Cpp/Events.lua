@@ -51,6 +51,23 @@ Events.LOGIC_EVENT_TRIBUTE_PAID = nil
 -- Event.GetNewWeatherState() Event.GetOldWeatherState()
 Events.LOGIC_EVENT_WEATHER_STATE_CHANGED = nil
 
+--- CppLogic event. entity getötet (vorher, nach hurt).
+-- Event.GetEntityID1() attacker und Event.GetEntityID2() target
+-- Event.AttackSource Event.GetPlayerID() attacker player
+-- Event.GetPlayerID() may have an player set, even if Event.GetEntityID1() is 0
+Events.CPPLOGIC_EVENT_ON_ENTITY_KILLS_ENTITY = nil
+
+--- CppLogic event. nachdem steuern eingenommen wurden, aber bevor sold gezahlt wurde.
+-- Event.GetEntityID() player! id
+-- Event.GetBuyAmount() steuern Event.GetBuyResource() steuer resource (GoldRaw)
+-- Event.GetSellAmount() sold Event.GetSellResource() sold resource (Gold)
+Events.CPPLOGIC_EVENT_ON_PAYDAY = nil
+
+--- CppLogic event. nachdem helias ein ziel bekehrt hat.
+-- id changed from Event.GetEntityID1() (no longer valid) to Event.GetEntityID2()
+-- Event.GetEntityID() is converting helias
+Events.CPPLOGIC_EVENT_ON_CONVERT_ENTITY = nil
+
 --- triggerfix script event. entity getötet (vorher, nach hurt).
 -- ohne TriggerFixCppLogicExtension können ids von soldiern inkorrekt sein.
 -- Event.GetEntityID1() attacker und Event.GetEntityID2() target
@@ -86,5 +103,4 @@ Events.SCRIPT_EVENT_ON_POST_SAVE = nil
 --- TriggerFixCppLogicExtension script event.
 -- id changed from Event.GetEntityID1() (no longer valid) to Event.GetEntityID2()
 -- Event.GetEntityID() is converting helias
--- Event.GetPlayerID() is the player converted to
 Events.SCRIPT_EVENT_ON_CONVERT_ENTITY = nil

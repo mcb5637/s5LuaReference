@@ -111,7 +111,10 @@ function Framework.PlayVideo(_file, _bool) end
 function Framework.RestartMap() end
 
 --- Speichert den Spielstand ohne Überschreibwarnung.
-function Framework.SaveGame(_savegameSlot, _savegameName) end
+---@param _savegameSlot string sollte "sane_X" oder "quicksave" sein (name des ordners, zum laden genutzt)
+---@param _savegameName string anzeigename
+---@param _debugSave boolean|nil sollte immer false/nil sein, ansonsten wird in Temp/DebugSave/ gespeichert, von wo nicht geladen werden kann.
+function Framework.SaveGame(_savegameSlot, _savegameName, _debugSave) end
 
 --- Gibt zurück, ob Videos abgespielt werden sollen.
 -- return: true/false
