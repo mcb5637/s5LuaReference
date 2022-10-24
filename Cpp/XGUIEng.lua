@@ -179,7 +179,8 @@ function XGUIEng.SetTextByValue(_widget, _number, _right) end
 ---@param _r number (0-255)
 ---@param _g number (0-255)
 ---@param _b number (0-255)
-function XGUIEng.SetTextColor(_widget, _r, _g, _b) end
+---@param _a number|nil (0-255, default 255)
+function XGUIEng.SetTextColor(_widget, _r, _g, _b, _a) end
 
 --- Setzt den Text aus einer Datei?
 ---@param _widget number|string

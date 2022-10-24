@@ -1803,7 +1803,7 @@ function Logic.SetGlobalInvulnerability(_flag) end
 ---die meisten animationen sind nicht im animset, und können nicht extra gesetzt werden.
 ---@param _id number
 ---@param _modelset number
----@param _animset number
+---@param _animset number|nil
 function Logic.SetModelAndAnimSet(_id,_modelset,_animset) end
 
 --- Setzt die Anzahl im HQ kaufbarer Helden. (MP)
