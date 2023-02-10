@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 --- Funktionen um das Spiel grundlegend zu manipulieren.
 --- soweit nicht anders notiert, ist keine funktion hier syncronisiert. Fuktionen die den spielstatus ändern, müssen aus einem syncronen kontext aufgerufen werden.
 --- C
@@ -1992,7 +1993,10 @@ function Logic.UpdateBlocking(_minX, _minY, _maxX, _maxY) end
 ---@param _player number
 function Logic.UpgradeBuildingCategory(_upCat, _player) end
 
---- ???
+--- Wertet alle Entities der UpgradeCategory auf.
+-- ohne syncronisierung.
+---@param ucat number
+---@param player number
 function Logic.UpgradeSettler(ucat, player) end
 
 --- Wertet alle Entities der UpgradeCategory auf.
