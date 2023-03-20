@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 --- C
 -- funktionen innerhalb von triggern
 Event = {}

@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 --- Funktionen für die KI
 -- C
 AI = {}
@@ -164,10 +165,6 @@ function AI.Village_ClearConstructionQueue(_player) end
 
 --- !!! democopy
 -- Löscht die Erforschungsliste.
-function AI.Village_ClearResearchQueue(_player) end
-
---- !!! democopy
--- Löscht die Ausbauliste.
 function AI.Village_ClearResearchQueue(_player) end
 
 --- !!! democopy

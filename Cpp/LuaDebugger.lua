@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 --- LuaDebugger does always exist, but it only does something, if an actual luadebugger exists.
 --- most functions are added by the luadebugger, only a few are from shok.
 --- do not expect these functions to be there/actually work, when your map gets played by someone else.

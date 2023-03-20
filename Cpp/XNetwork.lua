@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 XNetwork = {
     Broadcast_Client_GetFoundServer = function()end,
     Broadcast_Client_GetNumberOfServer = function()end,
