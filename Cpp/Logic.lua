@@ -626,7 +626,8 @@ function Logic.GetEnergyRequiredForWeatherChange() end
 function Logic.GetEntities(_type,_max) end
 
 --- Gibt Entities in einem Gebiet zurück.
--- Rückgabe nach Entfernung sortiert.
+--- Rückgabe nach Entfernung sortiert.
+--- accessCategory wird nur genutzt, wenn entitytype == 0 ist.
 ---@param _entityType number
 ---@param _posX number
 ---@param _posY number
