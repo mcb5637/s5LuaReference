@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 Sound = {
     ---gets current volume
     ---@param soundtype number, see set

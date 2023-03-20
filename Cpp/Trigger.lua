@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field, missing-return
 --- C
 --- Trigger system.
 --- nicht syncronisiert. wenn ein trigger aus einem syncronen kontext gestartet wird, sind alle seine ausführungen ebenfalls syncron.

@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return, duplicate-set-field
 --- size of a table
 ---@param t table
 ---@return number

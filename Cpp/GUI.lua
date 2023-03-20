@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return, duplicate-set-field
 --- Funktionen für die grafische Oberfläche
 --- alle funktionen hier sind entweder selbst syncronisierend oder haben keinen einfluss auf den gamestate.
 --- C

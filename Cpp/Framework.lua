@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 --- Funktionen zum Speichern, Laden, Mapladen...
 -- C
 -- 

@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return, duplicate-set-field
 --- Funktionen um das Spiel grundlegend zu manipulieren.
 --- soweit nicht anders notiert, ist keine funktion hier syncronisiert. Fuktionen die den spielstatus ändern, müssen aus einem syncronen kontext aufgerufen werden.
 --- C
@@ -630,9 +631,10 @@ function Logic.GetEntities(_type,_max) end
 ---@param _posY number
 ---@param _range number
 ---@param _amount number (maximal 16)
+---@param _accessCategory number|nil flags 2->Siedler, 4->Tiere, 8->Gebäude, 16->Statics, 32->Ornamental, default 10
 ---@return number amount
 ---@return number id1 ...
-function Logic.GetEntitiesInArea(_entityType, _posX, _posY, _range, _amount) end
+function Logic.GetEntitiesInArea(_entityType, _posX, _posY, _range, _amount, _accessCategory) end
 
 --- Gibt den Rüstungswert des Entities zurück.
 ---@param _entityId number
@@ -1440,16 +1442,19 @@ function Logic.IsOvertimeActiveAtBuilding(_id) end
 function Logic.IsPlayerAttractionSlotAvailable(_player) end
 
 --- Gibt zurück, ob Entities im Gebiet sind.
+--- maximale reichweite ~6400, ab ~3200 falsch negativ möglich?
 ---@param _player number
 ---@param _posX number
 ---@param _posY number
 ---@param _range number
----@param _cat number|nil flags 2->Siedler, 4->Tiere, 8->Gebäude, 16->Statics, 32->Ornamental, default 10
+---@param _accessCategory number|nil flags 2->Siedler, 4->Tiere, 8->Gebäude, 16->Statics, 32->Ornamental, default 10
 ---@return number flag
-function Logic.IsPlayerEntityInArea(_player, _posX, _posY, _range, _cat) end
+function Logic.IsPlayerEntityInArea(_player, _posX, _posY, _range, _accessCategory) end
 
 --- Prüft, ob Entities im Gebiet sind.
--- _catName: EntityCategory als String ("Hero" anstatt EntityCategories.Hero)
+--- _catName: EntityCategory als String ("Hero" anstatt EntityCategories.Hero)
+--- maximale reichweite ~6400, ab ~3200 falsch negativ möglich?
+--- in jedem fall, werden nur siedler und gebäude abgefragt (über AccessCategory).
 ---@param _player number
 ---@param _posX number
 ---@param _posY number

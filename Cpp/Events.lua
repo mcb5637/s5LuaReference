@@ -68,6 +68,19 @@ Events.CPPLOGIC_EVENT_ON_PAYDAY = nil
 -- Event.GetEntityID() is converting helias
 Events.CPPLOGIC_EVENT_ON_CONVERT_ENTITY = nil
 
+--- CppLogic event. nachdem ein effect erstellt wurde.
+-- Event.GetEntityID() ist der effect
+Events.CPPLOGIC_EVENT_ON_EFFECT_CREATED = nil
+
+--- CppLogic event. bevor ein arrow oder cannonball effect einschlägt.
+-- Event.GetEntityID() ist der effect
+Events.CPPLOGIC_EVENT_ON_FLYINGEFFECT_HIT = nil
+
+--- CppLogic event. während ein effect destroyed wird.
+-- auch arrow und cannonball effekte sind bei aufruf nurnoch ein effect.
+-- Event.GetEntityID() ist der effect
+Events.CPPLOGIC_EVENT_ON_EFFECT_DESTROYED = nil
+
 --- triggerfix script event. entity getötet (vorher, nach hurt).
 -- ohne TriggerFixCppLogicExtension können ids von soldiern inkorrekt sein.
 -- Event.GetEntityID1() attacker und Event.GetEntityID2() target

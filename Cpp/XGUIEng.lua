@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 --- Funktionen um die Widgetds der GUI zu beeinflussen.
 --- nicht syncronisiert, kann alles aus einem asyncronen kontext aufgerufen werden.
 -- C
