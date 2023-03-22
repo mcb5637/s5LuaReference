@@ -633,7 +633,7 @@ function Logic.GetEntities(_type,_max) end
 ---@param _posY number
 ---@param _range number
 ---@param _amount number (maximal 16)
----@param _accessCategory number|nil flags 2->Siedler, 4->Tiere, 8->Gebäude, 16->Statics, 32->Ornamental, default 10
+---@param _accessCategory number|nil bitfield (2->settler, 4->animal, 8->building, 16->resource doodad, 32->static, 64->ornamental), default 10
 ---@return number amount
 ---@return number id1 ...
 function Logic.GetEntitiesInArea(_entityType, _posX, _posY, _range, _amount, _accessCategory) end
@@ -1449,7 +1449,7 @@ function Logic.IsPlayerAttractionSlotAvailable(_player) end
 ---@param _posX number
 ---@param _posY number
 ---@param _range number
----@param _accessCategory number|nil flags 2->Siedler, 4->Tiere, 8->Gebäude, 16->Statics, 32->Ornamental, default 10
+---@param _accessCategory number|nil bitfield (2->settler, 4->animal, 8->building, 16->resource doodad, 32->static, 64->ornamental), default 10
 ---@return number flag
 function Logic.IsPlayerEntityInArea(_player, _posX, _posY, _range, _accessCategory) end
 
