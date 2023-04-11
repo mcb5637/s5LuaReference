@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 Game = {
     Dbg_SaveCutscenes = function()end,
     DbgDumpLoopCounters = function()end,
@@ -12,6 +13,9 @@ Game = {
     HideTriggerDlg = function()end,
     IsDebugVersion = function()end,
     IsMapDebugSet = function()end,
+    ---returns the millisecods since start of the executable (updated each tick)
+    --- => a few milliseconds behind XGUIEng.GetSystemTime()
+    ---@return number
     RealTimeGetMs = function()end,
     SaveScreenShot = function()end,
     ShowFPS = function()end,

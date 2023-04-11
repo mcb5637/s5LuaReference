@@ -1892,6 +1892,7 @@ function Logic.SetTaskList(_id, _tasklist) end
 
 --- Setzt den Technologiestatus.
 --- siehe s5CommunityLib/tables/TechState.lua.
+--- nur Forbidden, Waiting (tech dauerhaft blockiert), Allowed, InProgress (wird sofort erforscht)
 ---@param _player number
 ---@param _tech number
 ---@param _state number
