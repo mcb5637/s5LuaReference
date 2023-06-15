@@ -1,21 +1,22 @@
---- Funktionen, um Werte Savegameübergreifend zu speichern.
+---@diagnostic disable: missing-return
+--- Funktionen, um Werte savegameübergreifend zu speichern.
 -- C
 GDB = {}
 
---- Gibt einen gespeicherten String zurück
--- _key: String unter dem der String abgespeichert wurde
--- return: gespeicherten String (key existiert nicht???)
+--- Gibt eine gespeicherte Zeichenkette zurück.
+---@param _key string
+---@return string -- gespeicherte Zeichenkette (leer, falls Schlüssel nicht vorhanden)
 function GDB.GetString(_key) end
 
---- Gibt einen gespeicherten Wert zurück (untested)
--- _key: STRING! unter dem der Wert abgespeichert wurde
--- return: Gespeicherter Wert oder 0, wenn _key nicht existent
+--- Gibt einen gespeicherten Wert zurück (untested).
+---@param _key string
+---@return number -- gespeicherter Wert (0, falls Schlüssel nicht vorhanden)
 function GDB.GetValue(_key) end
 
 --- !!! democopy
--- Prüft, ob _key existiert und in Ordnung ist.
--- _key: String
--- return: true/false
+--- Prüft, ob _key vorhanden und in Ordnung ist.
+---@param _key string
+---@return boolean
 function GDB.IsKeyValid(_key) end
 
 --- !!! democopy
@@ -23,10 +24,14 @@ function GDB.IsKeyValid(_key) end
 -- Funktioniert auch ohne! Warum???
 function GDB.Save() end
 
---- Setzt _key auf _string (beides strings)
+--- Speichert eine Zeichenkette unter einem Schlüssel ab.
+---@param _key string
+---@param _string string
 function GDB.SetString(_key, _string) end
 
---- Setzt _key (STRING!) auf _value (int) (untested)
+--- Speichert eine Zahl unter einem Schlüssel ab.
+---@param _key string
+---@param _value number
 function GDB.SetValue(_key, _value) end
 
 --- ???
