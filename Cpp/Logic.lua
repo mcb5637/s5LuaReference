@@ -1928,7 +1928,7 @@ function Logic.SetWeatherOffset(_sec) end
 --- (lua API existiert, aber das entity event ist leer).
 function Logic.SetWorkTaskListsPerCycle(_player, _entitytype, _num) end
 
---- ???
+--- deprecated, setzt leader befehl auf aggressiv, scheint keinen unterschied zum default (=defend) zu machen
 function Logic.SettlerAggressive(_id) end
 
 --- leader stop befehl (bewegt sich weiter um gegner in reichweite anzugreifen).
@@ -1936,7 +1936,6 @@ function Logic.SettlerAggressive(_id) end
 function Logic.SettlerDefend(_id) end
 
 --- leader position halten Befehl.
---- memoryleak?
 ---@param _id number
 function Logic.SettlerStand(_id) end
 

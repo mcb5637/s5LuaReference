@@ -60,6 +60,7 @@ function Framework.GetMapMultiplayerInformation(_name, __type, _cName) end
 function Framework.GetMapNameAndDescription(_name, _type, _cName) end
 
 --- Gibt die mapnamen (filenamen) mit dem entsprechenden Indexs zurück.
+--- _number muss <10 sein, ansonsten gibt es undefined behavior (wäre es so schwer gewesen, lua_checkstack zu benutzen?)
 -- return: number, name1, name2,...
 function Framework.GetMapNames(_startIndex, _number, _type, _cName) end
 
@@ -75,8 +76,13 @@ function Framework.GetNumberOfMaps(_type, _cName) end
 -- z.B.: "1.06.0217 Extra2"
 function Framework.GetProgramVersion() end
 
---- Gibt die Savegameslots der Savegames zurück.
+--- Gibt die Savegameslots der Savegames zurück. (alles im SaveGames ordner)
+--- _number muss <10 sein, ansonsten gibt es undefined behavior (wäre es so schwer gewesen, lua_checkstack zu benutzen?)
 -- return: number, name1, name2,...
+---@param _index number
+---@param _number number
+---@return number num
+---@return string save1
 function Framework.GetSaveGameNames(_index, _number) end
 
 --- Gibt den Anzeigenamen des Savegames zurück.
@@ -95,7 +101,8 @@ function Framework.GetSystemTimeDateString() end
 function Framework.GetVName() end
 
 --- Gibt zurück, ob ein Savegame geladen werden kann.
--- return: true/false
+--- prüft, ob die im save gespeicherte map existiert und dieselbe GUID hat.
+---@return boolean
 function Framework.IsSaveGameValid(_savegameSlot) end
 
 --- Lädt den Spielstand.

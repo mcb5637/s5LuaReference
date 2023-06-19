@@ -468,7 +468,7 @@ function GUI.SetWeather(_weaterTyp) end
 ---@param _id number
 function GUI.SettlerAffectUnitsInArea(_id) end
 
---- Agressiver Modus (inaktiv?)
+--- deprecated, setzt leader in aggressive, selbes verhalten wie default (=defend)
 ---@param _id number
 function GUI.SettlerAggressive(_id) end
 
