@@ -11,6 +11,8 @@ Game = {
     GameTimeSpeedUp = function()end,
     GUIActivate = function()end,
     HideTriggerDlg = function()end,
+    --- immer false
+    ---@return boolean
     IsDebugVersion = function()end,
     IsMapDebugSet = function()end,
     ---returns the millisecods since start of the executable (updated each tick)

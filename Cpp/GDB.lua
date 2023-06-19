@@ -13,15 +13,13 @@ function GDB.GetString(_key) end
 ---@return number -- gespeicherter Wert (0, falls Schlüssel nicht vorhanden)
 function GDB.GetValue(_key) end
 
---- !!! democopy
 --- Prüft, ob _key vorhanden und in Ordnung ist.
 ---@param _key string
 ---@return boolean
 function GDB.IsKeyValid(_key) end
 
---- !!! democopy
--- Speichert GDB-Datei.
--- Funktioniert auch ohne! Warum???
+--- Speichert GDB-Datei.
+-- SetString und SetValue specihern automatisch in die datei.
 function GDB.Save() end
 
 --- Speichert eine Zeichenkette unter einem Schlüssel ab.
@@ -34,8 +32,12 @@ function GDB.SetString(_key, _string) end
 ---@param _value number
 function GDB.SetValue(_key, _value) end
 
---- ???
-function GDB.SetStringNoSave() end
+--- Speichert eine Zeichenkette unter einem Schlüssel ab ohne die GDB datei zu speichern.
+---@param _key string
+---@param _string string
+function GDB.SetStringNoSave(_key, _string) end
 
---- ???
-function GDB.SetValueNoSave() end
+--- Speichert eine Zahl unter einem Schlüssel ab ohne die GDB datei zu speichern.
+---@param _key string
+---@param _value number
+function GDB.SetValueNoSave(_key, _value) end
