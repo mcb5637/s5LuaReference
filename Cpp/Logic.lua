@@ -1252,7 +1252,7 @@ function Logic.GroupAttack(_id, _target) end
 ---@param _id number
 ---@param _posX number
 ---@param _posY number
----@param _rot number
+---@param _rot number|nil
 function Logic.GroupAttackMove(_id, _posX, _posY, _rot) end
 
 --- _id bleibt stehen und verteidigt sich (Standardverhalten von Leadern).
@@ -1951,12 +1951,16 @@ function Logic.SoldierGetLeaderEntityID(id) end
 --- Erzeugt einen Partikel Effekt für Siedler (Bsp: Kanonenrauch bei PV_Cannon)
 --- EGL::CParticleEffectAttachmentBehavior
 ---@param _id number
----@param _node number (??? Manche Eingaben liefern hier einen Absturz)
+---@param _node number [0,2], der effekt wird am frame id 500+_node gerendert
 ---@param _eff number
 function Logic.SpawnParticleEffect(_id, _node, _eff) end
 
---- Blendet Nebel ein und aus.
--- _alpha: 1/0
+--- Blendet ein entity mit GGL::CAlphaBlendingBehavior (Entities.XD_BlendingFog).
+--- von aktuellem alpha zu _alpha in _time sekunden.
+--- und ja, der trigger in CreateDynamicFog ist nur dazu da ums komplizierter zu machen xD
+---@param _id number
+---@param _alpha number [0,1]
+---@param _time number sekunden
 function Logic.StartAlphaBlending(_id, _alpha, _time) end
 
 --- Funktionslos

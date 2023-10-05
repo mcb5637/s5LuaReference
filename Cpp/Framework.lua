@@ -63,7 +63,7 @@ function Framework.GetIndexOfMapName(_name, _type, _cName) end
 ---@param _name string
 ---@param __type number
 ---@param _cName string|nil
----@return boolean mpFlag
+---@return number mpFlag
 ---@return number maxPlayers
 ---@return number mpFlags
 ---@return string|nil mapGUID

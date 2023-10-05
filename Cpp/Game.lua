@@ -14,6 +14,8 @@ Game = {
     --- immer false
     ---@return boolean
     IsDebugVersion = function()end,
+    --- prüft, ob Software\\Blue Byte\\The Settlers - Heritage of Kings\\Development\\MapDebug in der registry gesetzt ist
+    ---@return boolean
     IsMapDebugSet = function()end,
     ---returns the millisecods since start of the executable (updated each tick)
     --- => a few milliseconds behind XGUIEng.GetSystemTime()
