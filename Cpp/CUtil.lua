@@ -74,4 +74,10 @@ CUtil = {
     UnblockWorkplace = function() end,
     UndetourScript = function() end,
     UpdateExplorationForCurrentPlayer = function() end,
+
+    --- Updated das blocking ohne betrachtung der höhe.
+    UpdateBlockingWholeMapNoHeight = function()end,
+
+    --- Updated das blocking der karte mit betrachtung der höhe (höhenunterschied > (oder >= ?) 100 scm sind normalerweise geblockt).
+    UpdateBlockingWholeMapWithHeight = function()end,
 }
