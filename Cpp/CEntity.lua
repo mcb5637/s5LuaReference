@@ -39,4 +39,19 @@ CEntity = {
     SetTechnologyInResearch = function()end,
     TriggerGetDamage = function()end,
     TriggerSetDamage = function(dmg)end,
+
+    Events = {
+        BUY_SERF = 81924, 
+        BUY_LEADER = 86069,
+        BUY_SOLDIER = 86071
+    },
+
+    --- Das Gegenstück zu CEntity.GetAttachedEntities(_entityID)
+    GetReversedAttachedEntities = function(_entityID)end,
+
+    --- Lua-index (startet bei 1) um event daten abzufragen.
+    GetEventData = function(_index)end,
+    
+    --- Gibt die Anzahl an Events "auf dem Stack" zurück.
+    GetNumberOfEvents = function()end,
 }
