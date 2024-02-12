@@ -94,34 +94,34 @@ GameCallback_PreConvert = function(_converterId, _toConvertId) end;
 ---@param _convertedId number
 GameCallback_EntityConverted = function(_converterId, _convertedId) end;
 
--- Wenn ein Minengebäude Rohstoffe fördert
----@param _mineId number
+-- Wenn ein Bergmann Rohstoffe fördert
+---@param _workerId number
 ---@param _pitId number
 ---@param _resourceType number
 ---@param _amount number
----@return number newMineId
+---@return number newWorkerId
 ---@return number newPitId
 ---@return number newResourceType
 ---@return number newAmount
-GameCallback_GainedResourcesFromMine = function(_mineId, _pitId, _resourceType, _amount) end;
+GameCallback_GainedResourcesFromMine = function(_workerId, _pitId, _resourceType, _amount) end;
 
 -- Wenn ein Veredler rohe Ressourcen aus dem HQ/Lager nimmt
----@param _id number
+---@param _workerId number
 ---@param _resourceType number
 ---@param _amount number
----@return number newId
+---@return number newWorkerId
 ---@return number newResourceType
 ---@return number newAmount
-GameCallback_ResourceTaken = function(_id, _resourceType, _amount) end;
+GameCallback_ResourceTaken = function(_workerId, _resourceType, _amount) end;
 
--- Wenn ein Veredlungsgebäude Rohstoffe veredelt
----@param _buildingId number
+-- Wenn ein Veredler Rohstoffe veredelt
+---@param _workerId number
 ---@param _resourceType number
 ---@param _amount number
----@return number newbuildingId
+---@return number newWorkerId
 ---@return number newResourceType
 ---@return number newAmount
-GameCallback_RefinedResource = function(_buildingId, _resourceType, _amount) end;
+GameCallback_RefinedResource = function(_workerId, _resourceType, _amount) end;
 
 -- Wenn die maximale Anzahl an Attachmentslots ermittelt wird
 ---@param _id number

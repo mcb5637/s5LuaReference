@@ -146,9 +146,10 @@ function CUtil.GetAttachedSerfs(_entityId) end
 ---@return string pionter
 function CUtil.GetBehaviour(_entityId, _behaviorVtp) end
 
--- Gibt das Blocking an einer Position mit Hunderter zurück
+-- Gibt das Blocking an einer Position in scm zurück
 ---@param _x number
 ---@param _y number
+---@return number bitset 0: free, 1: blocked, 2: bridge, 4: terrain (green)
 function CUtil.GetBlocking100(_x, _y) end
 
 -- Gibt eine Liste an Entities zurück auf die das Gebäude platziert werden kann.
@@ -196,7 +197,7 @@ function CUtil.GetGameTimeFactor() end
 -- Identisch mit Logic.LeaderGetCurrentCommand
 function CUtil.GetLeaderCommand() end
 
--- Gibt die Kartengröße ohne Hunderter zurück
+-- Gibt die Kartengröße in sm zurück
 ---@param _name string
 ---@param _type number
 ---@return number sizeX
@@ -222,7 +223,7 @@ function CUtil.GetPlayersMotivationHardcap(_playerId) end
 ---@return number
 function CUtil.GetPlayersMotivationSoftcap(_playerId) end
 
--- Gibt den Sektor einer Position zurück
+-- Gibt den Sektor einer Position in sm zurück
 --
 -- Crash bei fehlerhafter Eingabe
 ---@param _x number
@@ -230,7 +231,7 @@ function CUtil.GetPlayersMotivationSoftcap(_playerId) end
 ---@return number sector
 function CUtil.GetSector(_x, _y) end
 
--- Gibt den Sektor einer Position ohne Hunderter zurück
+-- Gibt den Sektor einer Position in sm zurück
 --
 -- Crash bei fehlerhafter Eingabe
 ---@param _x number
@@ -252,7 +253,7 @@ function CUtil.GetSystemTime() end
 ---@return number entityId
 function CUtil.GetTargetedEntity() end
 
--- Gibt Informationen über das Terrain an einer Position mit Hunderter zurück
+-- Gibt Informationen über das Terrain an einer Position in scm zurück
 ---@param _x number
 ---@param _y number
 ---@return number terrainHeight
@@ -261,19 +262,19 @@ function CUtil.GetTargetedEntity() end
 ---@return number terrainType
 function CUtil.GetTerrainInfo(_x, _y) end
 
--- Gibt die Geländehöhe an einer Position ohne Hunderter zurück
+-- Gibt die Geländehöhe an einer Position in sm zurück
 ---@param _x number
 ---@param _y number
 ---@return number terrainHeight
 function CUtil.GetTerrainNodeHeight(_x, _y) end
 
--- Gibt den Geländetyp an einer Position ohne Hunderter zurück
+-- Gibt den Geländetyp an einer Position in sm zurück
 ---@param _x number
 ---@param _y number
 ---@return number terrainType
 function CUtil.GetTerrainNodeType(_x, _y) end
 
--- Gibt die Vertexfarbe an einer Position ohne Hunderter zurück
+-- Gibt die Vertexfarbe an einer Position in sm zurück
 ---@param _x number
 ---@param _y number
 ---@return number r
@@ -281,13 +282,13 @@ function CUtil.GetTerrainNodeType(_x, _y) end
 ---@return number b
 function CUtil.GetTerrainVertexColor(_x, _y) end
 
--- Gibt die Geländehöhe an einer Position ohne Hunderter zurück
+-- Gibt die Geländehöhe an einer Position in sm zurück
 ---@param _x number
 ---@param _y number
 ---@return number waterHeight
 function CUtil.GetWaterHeight(_x, _y) end
 
--- Gibt die Geländehöhe an einer Position ohne Hunderter zurück
+-- Gibt die Geländehöhe an einer Position in sm zurück
 ---@param _x number
 ---@param _y number
 ---@return number waterType
@@ -363,7 +364,7 @@ function CUtil.RemoveStringTableText(_tableKey) end
 ---@param _tree number
 function CUtil.ReplaceEntityWithResourceEntity(_tree) end
 
--- Erzeugt einen temporären minimap marker an einer Position mit Hunderter
+-- Erzeugt einen temporären minimap marker an einer Position in scm
 ---@param _x number
 ---@param _y number
 ---@param _r number

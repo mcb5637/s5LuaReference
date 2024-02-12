@@ -3,7 +3,7 @@
 
 CPlaceBuilding = {}
 
--- Gibt zurück, ob ein Gebäude an der Stelle platziert werden kann.
+-- Gibt zurück, ob ein Gebäude an der Position in scm platziert werden kann.
 ---@param _upgradeCategory number
 ---@param _playerId number
 ---@param _x number

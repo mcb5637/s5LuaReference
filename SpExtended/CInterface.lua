@@ -109,7 +109,7 @@ function CSettler.e() end
 
 Pathfinding = {}
 
--- Gibt den Laufweg zwischen Position1 und Position2 mit Hunderter zurück
+-- Gibt den Laufweg zwischen Position1 und Position2 in scm zurück
 ---@param _x1 number
 ---@param _y1 number
 ---@param _x2 number
@@ -117,7 +117,7 @@ Pathfinding = {}
 ---@return table|nil positions
 function Pathfinding.FindPath(_x1, _y1, _x2, _y2) end
 
--- Gibt den Laufweg zwischen Position1 und Position2 mit Hunderter zurück
+-- Gibt den Laufweg zwischen Position1 und Position2 in scm zurück
 ---@param _x1 number
 ---@param _y1 number
 ---@param _x2 number
@@ -125,7 +125,7 @@ function Pathfinding.FindPath(_x1, _y1, _x2, _y2) end
 ---@return table|nil positions
 function Pathfinding.FindPathNew(_x1, _y1, _x2, _y2) end
 
--- Gibt den Laufweg zwischen Position1 und Position2 mit Hunderter zurück, wenn dieser kürzer gleich _maxlength ist
+-- Gibt den Laufweg zwischen Position1 und Position2 in scm zurück, wenn dieser kürzer gleich _maxlength ist
 ---@param _x1 number
 ---@param _y1 number
 ---@param _x2 number
@@ -136,7 +136,7 @@ function Pathfinding.FindPathStopLength(_x1, _y1, _x2, _y2, _maxlength) end
 
 -- Gibt die Laufdistanz zwischen Position1 und Position2 zurück (-1, wenn kein Path existiert)
 -- 
--- Achtung: Parameter sind mit Hunderter, Return ohne
+-- Achtung: Parameter sind in scm, Return ohne
 ---@param _x1 number
 ---@param _y1 number
 ---@param _x2 number
