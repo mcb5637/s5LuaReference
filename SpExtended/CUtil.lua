@@ -343,7 +343,7 @@ function CUtil.Payday_IsActive(_playerId) end
 
 -- Stoppt oder aktiviert den Zahltag für einen Spieler. Funktioniert nur sinnvol zum manuellen starten, da dieser beim stoppen vom Spiel sofort wieder gestartet wird
 ---@param _playerId number
----@param _active number
+---@param _active boolean
 function CUtil.Payday_SetActive(_playerId, _active) end
 
 -- Setzt die Zeit zwischen den Zahltagen eines Spielers
