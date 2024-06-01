@@ -81,6 +81,32 @@ Events.CPPLOGIC_EVENT_ON_FLYINGEFFECT_HIT = nil
 -- Event.GetEntityID() ist der effect
 Events.CPPLOGIC_EVENT_ON_EFFECT_DESTROYED = nil
 
+--- CppLogic event. während ein veredler resourcen veredelt.
+-- vor dem hinzufügen der resource und GameCallback_GainedResources.
+-- Event.GetEntityID() der veredler (worker) Event.GetBuyAmount() menge Event.GetBuyResource() ResourceType Event.GetSellResource() raw ResourceType
+Events.CPPLOGIC_EVENT_ON_RESOURCE_REFINED = nil
+
+--- CppLogic event. während ein minenarbeiter oder leibeigener resourcen abbaut.
+-- vor dem hinzufügen der resource und GameCallback_GainedResources.
+-- Event.GetEntityID() der veredler (worker)/serf Event.GetBuyAmount() menge Event.GetBuyResource()
+Events.CPPLOGIC_EVENT_ON_RESOURCE_MINED = nil
+
+--- CppLogic event. während ein veredler resourcen abholt.
+-- vor dem entfernen der resource.
+-- Event.GetEntityID() der veredler (worker) Event.GetSellAmount() menge Event.GetSellResource() ResourceType
+Events.CPPLOGIC_EVENT_ON_REFINER_SUPPLY_TAKEN = nil
+
+--- CppLogic event. während dem kauf von einem settler (und worker).
+--- Event.GetEntityID() gebäude, das den settler kauft.
+--- Event.ToBuy entitytyp, der gekauft werden soll.
+--- Event.TargetID workplace für den worker, leader für den soldier, sonst 0.
+--- Event.HasVCSpace hat der spieler genug VC platz (änderbar).
+--- Event.HasCost hat der spieler genug resourcen (änderbar) (ignoriert bei worker).
+--- Event.HasMotivation hat der spieler genug motivation (änderbar).
+--- Event.IsNotAlarmLocked ist das kaufgebäude nicht im alarm (änderbar).
+--- Event.HasHQSpace hat der spieler freie serf plätze (änderbar) (ignoriert bei allem was kein serf ist).
+Events.CPPLOGIC_EVENT_CAN_BUY_SETTLER = nil
+
 --- triggerfix script event. entity getötet (vorher, nach hurt).
 -- ohne TriggerFixCppLogicExtension können ids von soldiern inkorrekt sein.
 -- Event.GetEntityID1() attacker und Event.GetEntityID2() target

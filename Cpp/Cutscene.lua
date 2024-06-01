@@ -1,4 +1,5 @@
 Cutscene = {
     Cancel = function()end,
-    Start = function()end,
+	---@param name string
+    Start = function(name)end,
 }
