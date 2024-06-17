@@ -137,19 +137,27 @@ function XGUIEng.SetCustomWidgetInterfaceVariable(_widget, _index, _value) end
 ---@param _numberLines number
 function XGUIEng.SetLinesToPrint(_widget, _firstLine, _numberLines) end
 
---- Färbt ein Widget ein.
+--- Färbt ein Widget ein.  
+--- _state:
+--- - EGUIX::CButtonWidget (EGUIX::CGfxButtonWidget & EGUIX::CTextButtonWidget): 0->Normal, 1->MouseOver, 2->Geklickt, 3->Disabled, 4->Highlighed
+--- - EGUIX::CGfxButtonWidget: 10->IconMaterial (in jedem state darüber gelegt)
+--- - EGUIX::CStaticWidget (EGUIX::CStaticTextWidget & EGUIX::CProgressBarWidget): ignoriert (hat nur ein material, setze auf 0)
 ---@param _widget number|string
----@param _state number 0->Normal, 1->MouseOver, 2->Geklickt, 3->Disabled, 4->Highlighed (nur buttons haben states >=1, alles andere nur 0)
+---@param _state number
 ---@param _r number (0-255)
 ---@param _g number (0-255)
 ---@param _b number (0-255)
 ---@param _a number (0-255)
 function XGUIEng.SetMaterialColor(_widget, _state, _r, _g, _b, _a) end
 
---- Setzt die Textur eines Widgets (Nicht den Teil der Textur, der angezeigt wird...)
--- textur wird erst beim anzeigen geladen.
+--- Setzt die Textur eines Widgets (Texturkoordinaten bleiben unverändert).
+-- textur wird erst beim anzeigen geladen.  
+--- _state:
+--- - EGUIX::CButtonWidget (EGUIX::CGfxButtonWidget & EGUIX::CTextButtonWidget): 0->Normal, 1->MouseOver, 2->Geklickt, 3->Disabled, 4->Highlighed
+--- - EGUIX::CGfxButtonWidget: 10->IconMaterial (in jedem state darüber gelegt)
+--- - EGUIX::CStaticWidget (EGUIX::CStaticTextWidget & EGUIX::CProgressBarWidget): ignoriert (hat nur ein material, setze auf 0)
 ---@param _widget number|string
----@param _state number 0->Normal, 1->MouseOver, 2->Geklickt, 3->Disabled, 4->Highlighed (nur buttons haben states >=1, alles andere nur 0)
+---@param _state number
 ---@param _file string
 function XGUIEng.SetMaterialTexture(_widget, _state, _file) end
 
@@ -239,19 +247,21 @@ function XGUIEng.ShowAllSubWidgets(_widget, _flag) end
 ---@param _flag number
 function XGUIEng.ShowWidget(_widget, _flag) end
 
---- Spielt ein Video in einem Videofenster ab (VideoPreview).
+--- Spielt ein Video in einem Videofenster ab (VideoPreview, EGUIX::CVideoPlaybackCustomWidget).
+--- Beim ersten Aufruf, setzt die Videogröße auf die Größe des Widgets.
+--- Diese muss der Größe in der abzuspielenden Datei entsprechen, ansonsten werden nur Teile angezeigt.
+--- Wenn die Videogröße gesetzt ist, skalieren spätere WidgetSize Änderungen korrekt.
 ---@param _widget number|string
 ---@param _file string
 ---@param _loop number flag
 function XGUIEng.StartVideoPlayback(_widget, _file, _loop) end
 
---- Beendet das Abspielen in einem Videofenster (VideoPreview).
+--- Beendet das Abspielen in einem Videofenster (VideoPreview, EGUIX::CVideoPlaybackCustomWidget).
 ---@param _widget string|number
 function XGUIEng.StopVideoPlayback(_widget) end
 
 --- Kopiert das aktuelle Aussehen des Buttons auf _target.
 -- (Die Informationen von _target gehen verloren!)
----comment
 ---@param _source number|string
 ---@param _target number|string
 function XGUIEng.TransferMaterials(_source, _target) end

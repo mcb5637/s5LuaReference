@@ -75,8 +75,8 @@ function Logic.AddToPlayersGlobalResource(_player, _resourceType, _amount) end
 --- wenn dieselbe id wiederverwendet wird, werden die daten vom tribut überschrieben.
 ---@param _player number
 ---@param _tributeId number einzigartig für diesen Spieler
----@param _ownerEntityId number unbekannt, was das macht, sollte 0 sein
----@param _offeringPlayerId number unbekannt, was das macht, sollte 0 sein
+---@param _ownerEntityId number scheint keine funktion zu haben, sollte 0 sein
+---@param _offeringPlayerId number playerid, name des spielers wird neben dem tribut angezeigt (oder 0 für keine anzeige)
 ---@param _text string anzeigetext im tributmenü, StringTableTextKey oder direkter string
 ---@param _resourceType1 number
 ---@param _cost1 number
