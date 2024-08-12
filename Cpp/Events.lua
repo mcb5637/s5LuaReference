@@ -107,6 +107,12 @@ Events.CPPLOGIC_EVENT_ON_REFINER_SUPPLY_TAKEN = nil
 --- Event.HasHQSpace hat der spieler freie serf plätze (änderbar) (ignoriert bei allem was kein serf ist).
 Events.CPPLOGIC_EVENT_CAN_BUY_SETTLER = nil
 
+--- CppLogic ModLoader event. beim starten einer map, nach GameCallback_OnGameStart.
+Events.CPPLOGIC_EVENT_ON_MAP_STARTED = nil
+
+--- CppLogic ModLoader event. beim laden eines savegames, nach GameCallback_LocalRecreateGameLogic
+Events.CPPLOGIC_EVENT_ON_SAVEGAME_LOADED = nil
+
 --- triggerfix script event. entity getötet (vorher, nach hurt).
 -- ohne TriggerFixCppLogicExtension können ids von soldiern inkorrekt sein.
 -- Event.GetEntityID1() attacker und Event.GetEntityID2() target
