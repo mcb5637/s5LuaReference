@@ -1557,8 +1557,12 @@ function Logic.LeaderGetNearbyBarracks(_id) end
 ---@return number nsol
 function Logic.LeaderGetNumberOfSoldiers(_id) end
 
---- Verbindet einen existierenden Soldier mit diesem Leader.
----keine ahnung welcher soldier verknüpft wird, aber vermutlic der nächste.
+--- sucht für diesen leader den nächsten passenden soldier.
+--- prüfung auf SoldierType (aus der CLeaderBehaviorProps) und Leader.DamageClass==Soldier.DamageClass.
+--- kein effekt bei (und ein Nein feedback):
+--- - Leader kämpft gerade (hat ein Attachment vom typ ATTACKER_TARGET).
+--- - Leader hat keinen platz mehr für den Soldier
+--- - kein Soldier gefunden
 ---@param _id number
 function Logic.LeaderGetOneSoldier(_id) end
 

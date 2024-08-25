@@ -314,7 +314,12 @@ function GUI.GetTimeMS() end
 ---@param _forType number
 function GUI.LeaderChangeFormationType(_id, _forType) end
 
---- Der Leader erhält einen Soldier der in der Nähe steht
+--- sucht für diesen leader den nächsten passenden soldier.
+--- prüfung auf SoldierType (aus der CLeaderBehaviorProps) und Leader.DamageClass==Soldier.DamageClass.
+--- kein effekt bei (und ein Nein feedback):
+--- - Leader kämpft gerade (hat ein Attachment vom typ ATTACKER_TARGET).
+--- - Leader hat keinen platz mehr für den Soldier
+--- - kein Soldier gefunden
 ---@param _id number
 function GUI.LeaderGetOneSoldier(_id) end
 
