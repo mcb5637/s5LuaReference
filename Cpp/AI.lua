@@ -92,20 +92,22 @@ function AI.Entity_ConnectUnemployedLeaderToArmy(_player, _armyId, _max) end
 -- Fügt _id zu _armyId hinzu.
 function AI.Entity_ConnectWithArmy(_id, _armyId) end
 
---- Erstellt einen Trupp Soldaten.
--- (Keine aktive KI benötigt)
+--- Erstellt einen Trupp Soldaten (leader+soldiers).
+--- (Keine aktive KI benötigt)
+--- sucht nahe der angefragten position nach einer freien position und erstellt den trupp dort (wenn nicht gefunden, direkt an der angefragten position, im blocking).
+--- Bug: lookat position wird intern /100 geteilt, muss also mit *100 übergeben werden
 ---@param _playerId number
 ---@param _leaderType number
----@param _soldierType number|nil nil,0->Automatisch ermitteln
+---@param _soldierType number|nil ignoriert, wird automatisch vom leader abgefragt
 ---@param _soldiers number
 ---@param _posX number
 ---@param _posY number
----@param _0 number|nil
----@param _1 number|nil
+---@param _lookatXTimes100 number
+---@param _lookatYTimes100 number
 ---@param _experience number XXX_EXPERIENCE (0-3)
 ---@param _minSoldiers number Anzahl an Soldaten, bei denen der Trupp nachschub kaufen geht ??
 ---@return number id
-function AI.Entity_CreateFormation(_playerId, _leaderType, _soldierType, _soldiers, _posX, _posY, _0, _1, _experience, _minSoldiers) end
+function AI.Entity_CreateFormation(_playerId, _leaderType, _soldierType, _soldiers, _posX, _posY, _lookatXTimes100, _lookatYTimes100, _experience, _minSoldiers) end
 
 --- !!! democopy
 -- Gibt die armyId des Leaders zurück (-1->keine Armee)

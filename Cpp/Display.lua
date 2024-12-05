@@ -49,17 +49,30 @@ function Display.GfxSetCloneSnowEffectStatus(_targetGFX, _sourceGFX) end
 function Display.GfxSetCloneSnowStatus(_targetGFX, _sourceGFX) end
 
 --- Setzt die Nebelparameter.
--- _transS,_transE: Zeitpunkt für Änderung: 0.0-1.0
--- _flag: Nebel an?
--- _r,_g,_b: Nebelfarbe
--- _fogS,_fogE: Entfernung des Nebels (normal irgendwas bei 2000-30000)
+--- @param _gfx number
+--- @param _transS number start der änderung 0.0-1.0
+--- @param _transE number ende der änderung 0.0-1.0
+---@param _flag number nebel an?
+---@param _r number (0-255)
+---@param _g number (0-255)
+---@param _b number (0-255)
+---@param _fogS number entfernung zum anfang des nebels (normalerweise >=2000)
+---@param _fogE number entfernung zum ende des nebels (komplett intransparent) (normalerweise <=30000)
 function Display.GfxSetSetFogParams(_gfx, _transS, _transE, _flag, _r, _g, _b, _fogS, _fogE) end
 
 --- Setzt die Lichtparameter.
--- _transS,_transE: Zeitpunkt für Änderung: 0.0-1.0
--- _posX,_posY,_posZ: Position der Lichtquelle (Sonne)
--- _lanR,_lanG,_lanB: Überall gleiche Beleuchtung (Ambient/Umgebung)
--- _sunR,_sunG,_sunB: Licht der Sonne (Diffuse)
+--- @param _gfx number
+--- @param _transS number start der änderung 0.0-1.0
+--- @param _transE number ende der änderung 0.0-1.0
+---@param _posX number sonnerichting x
+---@param _posY number sonnerichting y
+---@param _posZ number sonnerichting z
+---@param _lanR number Überall gleiche Beleuchtung (Ambient/Umgebung) r (0-255)
+---@param _lanG number Überall gleiche Beleuchtung (Ambient/Umgebung) g (0-255)
+---@param _lanB number Überall gleiche Beleuchtung (Ambient/Umgebung) b (0-255)
+---@param _sunR number Licht der Sonne (Diffuse) r (0-255)
+---@param _sunG number Licht der Sonne (Diffuse) g (0-255)
+---@param _sunB number Licht der Sonne (Diffuse) b (0-255)
 function Display.GfxSetSetLightParams(_gfx, _transS, _transE, _posX, _posY, _posZ, _lanR, _lanG, _lanB, _sunR, _sunG, _sunB) end
 
 --- Setzt die Regenparameter.
@@ -71,13 +84,16 @@ function Display.GfxSetSetRainEffectStatus(_gfx, _transS, _transE, _flag) end
 -- _skyBox: "YSkyBox0"...{1-7} Empfehlung: 1->Schnee,4->Regen,rest->Normal
 function Display.GfxSetSetSkyBox(_gfx, _transS, _transE, _skyBox) end
 
---- Setzt die Schneebodenefektparameter.
+--- Setzt die Schneeparameter (Niederschlag).
 -- _transS,_transE: Zeitpunkt für Änderung: 0.0-1.0
 function Display.GfxSetSetSnowEffectStatus(_gfx, _transS, _transE, _flag) end
 
---- Setzt die Schneeparameter (Niederschlag).
--- _transS,_transE: Zeitpunkt für Änderung: 0.0-1.0
-function Display.GfxSetSetSnowStatus(_gfx, _transS, _transE, _flag) end
+--- Setzt die Schneebodenefektparameter.
+--- @param _gfx number
+--- @param _transS number start der änderung 0.0-1.0
+--- @param _transE number ende der änderung 0.0-1.0
+--- @param _alpha number status, alpha wert für schneetextur 0.0-1.0
+function Display.GfxSetSetSnowStatus(_gfx, _transS, _transE, _alpha) end
 
 --- Stellt die Ursprünglichen Spielerfarben wieder her.
 function Display.InitializePlayerColors() end
