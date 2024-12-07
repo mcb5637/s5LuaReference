@@ -200,14 +200,18 @@ function Logic.CreateEffect(_effectType, _posX, _posY, _playerId) end
 ---@return number id (0 bei fehler der nicht crasht)
 function Logic.CreateEntity(_entityType, _posX, _posY, _angle, _playerId) end
 
---- funktionslos
+--- berechnet größe von 2 vectoren, keine ausgabe
+--- vermutlich übriggebliebener test code
 function Logic.DEBUG_OutputRegionArray() end
 
---- funktionslos
+--- iteriert über entities, keine ausgabe
+--- vermutlich übriggebliebener test code
 function Logic.DEBUG_OutputRegionIteration(_regX, _regY, _accesCategory) end
 
---- funktionslos
-function Logic.DEBUG_TestNearbyEntityIterator() end
+--- iteriert über nahe entities und (ruft möglicherweise destroy auf?, möglicherweise auch auf ner kopie?)
+--- keine rückgabe
+--- vermutlich übriggebliebener test code
+function Logic.DEBUG_TestNearbyEntityIterator(eid) end
 
 --- Baut ein Gebäude unverzüglich aus (ohne Wartezeit bis 100%)
 -- ändert die Id!
