@@ -669,6 +669,7 @@ function Logic.GetEntityExplorationRange(_id) end
 function Logic.GetEntityHealth(_entityId) end
 
 --- Gibt die id des Scriptnamens zurück.
+--- Wenn ein scriptname mehrfach verwendet wird, die des zuletzt gesetzten entities.
 ---@param _name string
 ---@return number id
 function Logic.GetEntityIDByName(_name) end
@@ -679,6 +680,7 @@ function Logic.GetEntityIDByName(_name) end
 function Logic.GetEntityMaxHealth(_entityId) end
 
 --- Gibt den Entitynamen zurück (oder nil)
+--- Wenn der name durch von einem anderen entity wieder genutzt wird, gibt immer noch den alten (ungültigen) namen zurück.
 ---@param _entityId number
 ---@return string|nil
 function Logic.GetEntityName(_entityId) end
@@ -1788,6 +1790,7 @@ function Logic.SetEntityExplorationRange(_entityId, _range) end
 function Logic.SetEntityInvulnerabilityFlag(_id, _flag) end
 
 --- Setzt den Scriptnamen eines Entity. (nil löscht den Scriptnamen)
+--- Existiert bereits ein entity mit diesem name, wird das mapping name->id überschrieben, id->name nicht
 ---@param _entityId number
 ---@param _entityName string|nil
 function Logic.SetEntityName(_entityId, _entityName) end
