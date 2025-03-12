@@ -206,7 +206,21 @@ function AI.Village_IgnoreReconstructionForBuildingType(_player, _entityType) en
 function AI.Village_LimitExpansionRadius(_player, _range) end
 
 --- Dieser Rohstoff wird von Serfs bevorzugt abgebaut.
-function AI.Village_SetResourceFocus(_player, _resType) end
+--- _ety: 
+--- - Entities.XD_Iron1
+--- - Entities.XD_IronPit1
+--- - Entities.XD_Sulfur1
+--- - Entities.XD_SulfurPit1
+--- - Entities.XD_Stone1
+--- - Entities.XD_StonePit1
+--- - Entities.XD_Clay1
+--- - Entities.XD_ClayPit1
+--- - 0 (default)
+--- (code für diverse gebäude und serf existiert, scheint aber kaputt zu sein)
+--- (serfs ändern ihre aufgabe nicht sofort, aber z.b. idle task list setzen erzwingt ein update)
+---@param _player number
+---@param _ety number
+function AI.Village_SetResourceFocus(_player, _ety) end
 
 --- Setzt, wie viele Serfs der Spieler kauft.
 function AI.Village_SetSerfLimit(_player, _max) end
