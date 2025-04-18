@@ -35,10 +35,10 @@ function GUI.ActivateCutSceneState() end
 --- ? / Dieb Bombe entschärfen ?
 function GUI.ActivateDisarmKegCommandState() end
 
---- cursor 14 /  ??
+--- cursor 14 /  entlassen (nicht genutzt)
 function GUI.ActivateExpelSettlerState() end
 
---- ?? / ??
+--- ?? / überstunden für einzelnen arbeiter (nicht genutzt)
 function GUI.ActivateForceWorkerToWorkState() end
 
 --- cursor 25 / Command_Guard
@@ -77,7 +77,7 @@ function GUI.ActivateSecureStolenGoodsState() end
 --- cursor 16/10 / Normales selektiern
 function GUI.ActivateSelectionState() end
 
---- ? / ?
+--- ? / gebäude abreißen
 function GUI.ActivateSellBuildingState() end
 
 --- ? / Dario Falke senden
