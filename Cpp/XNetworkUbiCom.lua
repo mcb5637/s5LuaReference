@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return
 XNetworkUbiCom = {
     Account_Create = function()end,
     Account_GetLastSyntaxErrorCode = function()end,
@@ -52,8 +53,11 @@ XNetworkUbiCom = {
     Lobby_State_IsInRoom = function()end,
     Lobby_State_IsJoiningRoom = function()end,
     Manager_Create = function()end,
+	---@return number flag
     Manager_Destroy = function()end,
+	---@return number flag
     Manager_DestroyASAP = function()end,
+	---@return number flag
     Manager_DoesExist = function()end,
     Manager_GetLocalUserUbiComAccountName = function()end,
     Manager_GetState = function()end,
@@ -63,9 +67,13 @@ XNetworkUbiCom = {
     Manager_Update = function()end,
     Match_GetNumberOfPlayers = function()end,
     Match_OutputFinalResult = function()end,
-    Match_SetSingleResult = function()end,
+	---@param name string
+	---@param result number 1 won, -1 lost
+	---@param team number 0-based
+    Match_SetSingleResult = function(name, result, team)end,
     MOTD_GetGameMessage = function()end,
     MOTD_GetUbiSoftMessage = function()end,
+	---@return string
     Tool_GetCurrentLanguageShortName = function()end,
     User_GetPassword = function()end,
     User_SetPassword = function()end,

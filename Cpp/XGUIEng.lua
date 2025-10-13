@@ -22,7 +22,7 @@ function XGUIEng.DoManualButtonUpdate(_widget) end
 --- Gibt ein im Widget gespeichertes int zurück.
 -- (Speichern mit XGUIEng.SetBaseWidgetUserVariable)
 ---@param _widget number|string
----@param _index number
+---@param _index number [0,1]
 ---@return number
 function XGUIEng.GetBaseWidgetUserVariable(_widget, _index) end
 
@@ -116,7 +116,7 @@ function XGUIEng.LimitTextLines(_widget, _max, _last) end
 --- Speichert _int im Widget.
 -- (Lesen mit XGUIEng.GetBaseWidgetUserVariable)
 ---@param _widget number|string
----@param _index number
+---@param _index number [0,1]
 ---@param _int number
 function XGUIEng.SetBaseWidgetUserVariable(_widget, _index, _int) end
 
