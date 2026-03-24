@@ -149,3 +149,7 @@ Events.SCRIPT_EVENT_ON_POST_SAVE = nil
 -- id changed from Event.GetEntityID1() (no longer valid) to Event.GetEntityID2()
 -- Event.GetEntityID() is converting helias
 Events.SCRIPT_EVENT_ON_CONVERT_ENTITY = nil
+
+--- CppLogic event. triggered when the local player clicks on the map
+--- before gui states, but after widgets
+Events.CPPLOGIC_EVENT_ON_CLICK_ON_MAP = nil
