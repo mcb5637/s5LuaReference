@@ -39,8 +39,10 @@ Events.LOGIC_EVENT_GOODS_TRADED = nil
 --- funktionslos
 Events.LOGIC_EVENT_PLAYER_DIED = nil
 
---- erforschung fertig (buggy?)
--- Event.GetPlayerID() Event.GetTechnologyType()
+--- erforschung fertig (nicht aufgerufen ohne CppLogic)
+--- Event.GetEntityID() gebäude, in dem geforscht wird.
+--- Event.GetTechnologyType() tech die erforscht wird.
+--- Event.GetPlayerID() spieler der forscht.
 Events.LOGIC_EVENT_RESEARCH_DONE = nil
 
 --- Tribut gezahlt
@@ -58,7 +60,7 @@ Events.LOGIC_EVENT_WEATHER_STATE_CHANGED = nil
 Events.CPPLOGIC_EVENT_ON_ENTITY_KILLS_ENTITY = nil
 
 --- CppLogic event. nachdem steuern eingenommen wurden, aber bevor sold gezahlt wurde.
--- Event.GetEntityID() player! id
+-- Event.GetPlayerID() player id
 -- Event.GetBuyAmount() steuern Event.GetBuyResource() steuer resource (GoldRaw)
 -- Event.GetSellAmount() sold Event.GetSellResource() sold resource (Gold)
 Events.CPPLOGIC_EVENT_ON_PAYDAY = nil
@@ -112,6 +114,31 @@ Events.CPPLOGIC_EVENT_ON_MAP_STARTED = nil
 
 --- CppLogic ModLoader event. beim laden eines savegames, nach GameCallback_LocalRecreateGameLogic
 Events.CPPLOGIC_EVENT_ON_SAVEGAME_LOADED = nil
+
+--- CppLogic event. nachdem eine Forschung gestarted wurde.
+--- Event.GetEntityID() gebäude, in dem geforscht wird.
+--- Event.GetTechnologyType() tech die erforscht wird.
+--- Event.GetPlayerID() spieler der forscht.
+Events.CPPLOGIC_EVENT_ON_RESEARCH_STARTED = nil
+
+--- CppLogic event. fotrschritt bei einer Forschung gemacht.
+--- Event.GetEntityID2() gebäude, in dem geforscht wird.
+--- Event.GetEntityID1() arbeiter, der fortschritt macht (oder 0).
+--- Event.GetTechnologyType() tech die erforscht wird.
+--- CppLogic.Logic.GetResearchTriggerProgress()/CppLogic.Logic.SetResearchTriggerProgress fortschritt
+Events.CPPLOGIC_EVENT_ON_RESEARCH_PROGRESS = nil
+
+--- CppLogic event. fortschritt beim gebäudebau.
+--- Event.GetEntityID() constructionsite des gebäudes, das gebaut wird.
+--- CppLogic.Logic.ConstructionTriggerGetProgress()/CppLogic.Logic.ConstructionTriggerSetProgress() fortschritt pro serf
+Events.CPPLOGIC_EVENT_ON_CONSTRUCTION_PROGRESS = nil
+
+--- CppLogic event. eine resource ändert sich aus irgendeinem grund (vor der änderung).
+--- vorsicht, resourcen im trigger ändern ruft den trigger wieder auf, kann zu einem stackoverflow führen!
+-- Event.GetPlayerID() player id
+-- Event.GetSellAmount() res die abgezogen werden (negativ für hinzugefügte res)
+-- Event.GetSellResource() res type der geändert wird
+Events.CPPLOGIC_EVENT_ON_RESOURCE_CHANGED = nil
 
 --- triggerfix script event. entity getötet (vorher, nach hurt).
 -- ohne TriggerFixCppLogicExtension können ids von soldiern inkorrekt sein.

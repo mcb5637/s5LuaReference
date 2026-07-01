@@ -8,8 +8,8 @@ LuaDebugger = {
     ---pauses execution here
     Break = function()end,
     ---logs something to the luadebugger output window
-    ---@param str any
-    Log = function(str)end,
+    ---@param ... any
+    Log = function(...)end,
     Show = function()end,
     ShowExecuteLineDialog = function()end,
     ---writes a table into a file
