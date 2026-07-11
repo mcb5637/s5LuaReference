@@ -1954,7 +1954,8 @@ function Logic.SettlerStand(_id) end
 function Logic.SetupGfxSet() end
 
 --- Funktionslos     SCV 69 verwenden
---- sieht anscheinend in nem attachment zum effect nach...
+--- sieht in der falschen attachment richtung nach (würde also den ersten soldier attached zu diesem leader zurückgeben...)
+--- siehe SVLib.GetLeaderOfSoldier
 ---@param id number
 ---@return number
 function Logic.SoldierGetLeaderEntityID(id) end
