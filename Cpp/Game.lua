@@ -3,6 +3,7 @@ Game = {
     Dbg_SaveCutscenes = function()end,
     DbgDumpLoopCounters = function()end,
     Escape = function()end,
+    ---@return number
     GameTimeGetFactor = function()end,
     GameTimeReset = function()end,
     GameTimeSetFactor = function(speed)end,

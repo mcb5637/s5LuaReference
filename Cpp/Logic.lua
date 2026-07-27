@@ -1605,7 +1605,8 @@ function Logic.LeaderReleaseOneSoldier(_id) end
 function Logic.LeaderSetTerritory(_id, _posX, _posY, _range) end
 
 --- Blitzeinschlag an Position; gleichbedeutend mit Lighning Effekt?
---- CreateEffect benutztn
+--- hardcoded GGL::CEffectLightning, selbst bei gefixtem effect, kann zu crashes führen!
+---@deprecated CreateEffect benutztn
 ---@param _positionX number
 ---@param _positionY number
 function Logic.Lightning(_positionX, _positionY) end
