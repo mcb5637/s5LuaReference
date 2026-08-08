@@ -128,6 +128,12 @@ Events.CPPLOGIC_EVENT_ON_RESEARCH_STARTED = nil
 --- CppLogic.Logic.GetResearchTriggerProgress()/CppLogic.Logic.SetResearchTriggerProgress fortschritt
 Events.CPPLOGIC_EVENT_ON_RESEARCH_PROGRESS = nil
 
+--- CppLogic event. nachdem eine Forschung abgevrochen wurde.
+--- Event.GetEntityID() gebäude, in dem geforscht wird.
+--- Event.GetTechnologyType() tech die erforscht wird.
+--- Event.GetPlayerID() spieler der forscht.
+Events.CPPLOGIC_EVENT_ON_RESEARCH_CANCELED = nil
+
 --- CppLogic event. fortschritt beim gebäudebau.
 --- Event.GetEntityID() constructionsite des gebäudes, das gebaut wird.
 --- CppLogic.Logic.ConstructionTriggerGetProgress()/CppLogic.Logic.ConstructionTriggerSetProgress() fortschritt pro serf
@@ -180,3 +186,21 @@ Events.SCRIPT_EVENT_ON_CONVERT_ENTITY = nil
 --- CppLogic event. triggered when the local player clicks on the map
 --- before gui states, but after widgets
 Events.CPPLOGIC_EVENT_ON_CLICK_ON_MAP = nil
+
+--- CppLogic event. triggered, when a building upgrade startes
+--- Event.GetEntityID() building to upgrade
+Events.CPPLOGIC_EVENT_ON_UPGRADE_STARTED = nil
+
+--- CppLogic event. triggered, when a building upgrade was canceled
+--- Event.GetEntityID() building to upgrade
+Events.CPPLOGIC_EVENT_ON_UPGRADE_CANCELED = nil
+
+--- CppLogic event. triggered, when training starts
+--- Event.GetEntityID1() building
+--- Event.GetEntityID2() settler
+Events.CPPLOGIC_EVENT_ON_TRAINING_START = nil
+
+--- CppLogic event. triggered, when training completes or gets canceled due to the building dying
+--- Event.GetEntityID2() building
+--- Event.GetEntityID1() settler
+Events.CPPLOGIC_EVENT_ON_TRAINING_COMPLETE = nil
