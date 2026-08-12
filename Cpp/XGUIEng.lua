@@ -62,7 +62,7 @@ function XGUIEng.GetSystemTime() end
 function XGUIEng.GetText(_widget) end
 
 --- Gibt die id eines Widget zurück.
----@param _widget string
+---@param _widget string|number
 ---@return number id
 function XGUIEng.GetWidgetID(_widget) end
 
