@@ -204,3 +204,14 @@ Events.CPPLOGIC_EVENT_ON_TRAINING_START = nil
 --- Event.GetEntityID2() building
 --- Event.GetEntityID1() settler
 Events.CPPLOGIC_EVENT_ON_TRAINING_COMPLETE = nil
+
+--- CppLogic event. triggered, when cannon construction starts
+--- Event.GetEntityID() building
+--- cannon type via usual func
+Events.CPPLOGIC_EVENT_ON_CANNON_CONSTRUCTION_STARTED = nil
+
+--- CppLogic event. triggered, when a serf was bought at an hq.
+--- note: no trigger/callback when left
+--- Event.GetEntityID1() building
+--- Event.GetEntityID2() serf
+Events.CPPLOGIC_EVENT_ON_SERF_BOUGHT = nil
