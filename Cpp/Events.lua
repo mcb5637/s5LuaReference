@@ -215,3 +215,13 @@ Events.CPPLOGIC_EVENT_ON_CANNON_CONSTRUCTION_STARTED = nil
 --- Event.GetEntityID1() building
 --- Event.GetEntityID2() serf
 Events.CPPLOGIC_EVENT_ON_SERF_BOUGHT = nil
+
+--- CppLogic event. triggered when attraction limit gets calculated.
+--- CppLogic.Logic.AttractionTriggerGetData() precalculated amount, player
+--- CppLogic.Logic.AttractionTriggerSetData(a) override amount
+Events.CPPLOGIC_EVENT_CALCULATE_ATTRACTION_USAGE = nil
+
+--- CppLogic event. triggered when attraction usage gets calculated.
+--- CppLogic.Logic.AttractionTriggerGetData() precalculated amount, player
+--- CppLogic.Logic.AttractionTriggerSetData(a) override amount
+Events.CPPLOGIC_EVENT_CALCULATE_ATTRACTION_LIMIT = nil
